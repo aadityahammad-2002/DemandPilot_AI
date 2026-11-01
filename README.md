@@ -1,171 +1,559 @@
-# YottaFlex AI — SKU-Store Demand Forecasting & Replenishment
 
-> **Enhanced integrated candidate:** start with [Final Implementation Report](FINAL_IMPLEMENTATION_REPORT.md), [Acceptance Matrix](FINAL_ACCEPTANCE_MATRIX.md), and [Windows Runbook](FINAL_WINDOWS_RUNBOOK.md). This enhanced source adds labelled adversarial overlays, causal forecast ablation and MASE, optional verified open-order inputs, a small evaluation-only business backtest and a read-only dashboard evidence endpoint. Full-scale, frontend Vitest/Vite/Playwright and live PostgreSQL acceptance remain pending; the enhanced frontend TypeScript typecheck has passed.
+# YottaFlex AI — Demand Forecasting & Inventory Replenishment
 
-**72-Hour Code Challenge · Associate AI Forward Deployed Engineer / AI Forward Deployed Engineer**
+A full-stack retail inventory planning system built using **Python, FastAPI, PostgreSQL, React, TypeScript, and Vite**.
 
-A runnable **local-first, full-stack retail planning system** combining deterministic synthetic datasets, temporal demand forecasting, stockout-aware evaluation, supplier and store-capacity constraints, traceable purchase recommendations, a FastAPI backend, PostgreSQL persistence, and a React dashboard.
+The application supports synthetic retail data generation, demand forecasting, inventory replenishment recommendations, decision traceability, validation, and interactive dashboards.
 
-> **Acceptance scope:** The implementation has passed candidate-reported automated **small-development-dataset** tests and a separate **medium-scale CSV regeneration check**. **The mandatory 2,000 SKU × 100 store × 365 day full-scale Parquet test is not yet accepted or evidenced.** See [Acceptance Status](docs/FINAL_ACCEPTANCE_STATUS.md). This distinction is deliberate, not a claim of complete scale verification.
+## 1. Prerequisites
 
-## Product overview
+Install the following software before setting up the project:
 
-- **Operations dashboard:** store network, stockouts, inventory, suppliers, demand forecasts, purchase suggestions, exceptions and audit trail; clicking a recommendation shows its full recorded trace.
-- **Developer dashboard:** architecture, data dictionary, deterministic generation, forecasting methodology, validation metrics, replenishment logic, negative-case fixtures and execution evidence.
-- **Backend:** FastAPI and SQLAlchemy; PostgreSQL migration revisions `0001`–`0005`; idempotent pipeline jobs and persistence-mapping ledger.
-- **Generation:** seeded, lifecycle-aware SKU/store matrix; promotions, intermittent/seasonal demand, supplier delays and product launches; observed stockouts kept distinct from zero latent demand. Hidden ground truth and all five negative-case fixtures are separate from valid feature inputs; the enhanced `examples/smoke_overlay_run` additionally contains five entity-schema-shaped adversarial overlays with restricted issue labels. These are NOT eligible for production DB import.
-- **Forecasting:** origin-safe features and temporal holdout, candidate models including moving average, seasonal-naive, Croston-SBA and ML histogram gradient boosting.
-- **Replenishment:** date-effective SKU eligibility, forecast lead-time demand, safety stock, reorder point, MOQ, pack size, supplier capacity, shared store capacity and full decision provenance. A suggested purchase is **not** a submitted purchase order. Optional explicit external `EXTPO` open-order snapshots now contribute to inventory position; without a verified snapshot, pipeline stock is explicitly assumed zero.
+| Software | Version |
+|---|---|
+| Python | 3.13 |
+| Node.js | 24.x or compatible |
+| npm | Installed with Node.js |
+| PostgreSQL | 18 or compatible |
+| Git | Latest stable |
+| VS Code | Recommended |
 
-## Official functional requirements
+Verify your installations in PowerShell:
 
-The ten core business entities are **SKU**, **Store**, **SalesHistory**, **InventorySnapshot**, **Supplier**, **SupplierSKU**, **LeadTimeObservation**, **Forecast**, **ReorderPolicy** and **PurchaseRecommendation**. Primary/foreign keys, optional relationships and lifecycle rules are documented in `docs/data_dictionary.json`, models and migration scripts.
+```powershell
+python --version
+node --version
+npm --version
+git --version
+```
 
-Required negative cases: (1) stockout confused with zero demand; (2) pack-size violation; (3) discontinued SKU recommended; (4) negative lead time; (5) future-sales forecasting leakage. See `examples/smoke_run/negative_fixtures/mandatory_cases.jsonl` and [Requirements Matrix](docs/REQUIREMENTS_MATRIX.md).
+PostgreSQL must be installed and its Windows service must be running.
 
-## Prerequisites
+## 2. Clone the Repository
 
-- Windows 10/11 or an equivalent supported environment.
-- Python 3.13, Node.js/npm, and PostgreSQL 18 or a compatible PostgreSQL version.
-- Free/local dependencies; Python optional **PyArrow/DuckDB** are needed for full-scale Parquet acceptance.
-- A **new or explicitly approved separate PostgreSQL database**. Never run Alembic/SQL seed scripts against an existing production database.
+```powershell
+git clone https://github.com/aadityahammad-2002/yottaflex-demand-forecasting.git
 
-## Setup and run (Windows PowerShell)
+cd yottaflex-demand-forecasting
+```
 
-From repository root:
+Open the project in VS Code:
+
+```powershell
+code .
+```
+
+Alternatively, download the repository as a ZIP, extract it, and open the extracted project folder in VS Code.
+
+All commands below assume you are working inside the project root unless otherwise specified.
+
+## 3. Backend Setup (Python + FastAPI)
+
+Open a new PowerShell terminal in VS Code.
+
+Navigate to the backend:
 
 ```powershell
 cd backend
+```
+
+Create a Python virtual environment:
+
+```powershell
 py -3.13 -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -r requirements-phase5.txt
+```
+
+Activate the environment:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+If PowerShell blocks activation, run:
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned
+.\.venv\Scripts\Activate.ps1
+```
+
+Install backend dependencies:
+
+```powershell
+python -m pip install --upgrade pip
+python -m pip install -r requirements-phase5.txt
+```
+
+Verify dependency installation:
+
+```powershell
+python -m pip check
+```
+
+The backend environment is now installed.
+
+## 4. PostgreSQL Database Setup
+
+This project uses PostgreSQL for persistent retail planning data.
+
+### 4.1 Create a database (first-time setup only)
+
+If you already have an approved `yottaflex_dual_v7` database with migration revision `0005`, **skip database creation and migrations**.
+
+For a fresh installation, open PostgreSQL's `psql` terminal as an administrator:
+
+```powershell
+psql -U postgres -d postgres
+```
+
+If `psql` is not on your PATH, use its full installation path, for example:
+
+```powershell
+& "C:\Program Files\PostgreSQL\18\bin\psql.exe" -U postgres -d postgres
+```
+
+Run the following commands inside `psql`:
+
+```sql
+CREATE ROLE yottaflex LOGIN;
+```
+
+Set a private password for the role:
+
+```text
+\password yottaflex
+```
+
+Create the database:
+
+```sql
+CREATE DATABASE yottaflex OWNER yottaflex;
+```
+
+Exit `psql`:
+
+```text
+\q
+```
+
+Use a unique local database password. Never commit database credentials to GitHub.
+
+### 4.2 Configure the backend environment
+
+From the `backend` directory:
+
+```powershell
 Copy-Item .env.example .env
 ```
 
-Set the database URL in `backend/.env` (or as an environment variable). **Do not commit real credentials.** The supplied candidate-specific runners require the isolated `yottaflex_dual_v7` database; configure a separate database only when explicitly approved and understand the script's safety checks.
+Open `backend/.env` and configure:
 
-On a **fresh, empty approved PostgreSQL database only**, execute `alembic upgrade head` from the backend directory. Demo source generation and the database import/pipeline are separate steps: consult `docs/V8_RUNBOOK_WINDOWS.md` and `docs/P1-T05-architecture.md` before performing any writes. A source-only smoke example is already bundled under `examples/smoke_run`.
-
-Start the API:
-
-```powershell
-cd backend
-.\.venv\Scripts\python.exe -m uvicorn app.integration.api:create_app --factory --host 127.0.0.1 --port 8000
+```dotenv
+DATABASE_URL=postgresql+psycopg://yottaflex:YOUR_URL_ENCODED_PASSWORD@localhost:5432/yottaflex_dual_v7
+APP_ENV=development
+SQL_ECHO=false
 ```
 
-In another terminal, start the frontend:
+Replace `YOUR_URL_ENCODED_PASSWORD` with your local PostgreSQL password, URL-encoded if it contains special characters.
+
+The `.env` file is private and must not be uploaded to GitHub.
+
+### 4.3 Apply database migrations (fresh empty database only)
+
+If you created a brand-new empty database, run from `backend`:
+
+```powershell
+python -m alembic upgrade head
+```
+
+Verify the migration:
+
+```powershell
+python -m alembic current
+```
+
+Expected revision:
+
+```text
+0005 (head)
+```
+
+**Important:** Do not run migrations against an existing populated or production database without reviewing the target and obtaining approval.
+
+### 4.4 Verify the PostgreSQL schema
+
+From `backend`:
+
+```powershell
+python verify_backend_schema_readonly.py
+```
+
+Expected result includes:
+
+```text
+READ-ONLY POSTGRESQL SCHEMA CHECK: PASS
+```
+
+This verification does not modify database records.
+
+## 5. Frontend Setup (React + TypeScript)
+
+Open a second PowerShell terminal in VS Code.
+
+From the project root, navigate to the frontend:
 
 ```powershell
 cd frontend
+```
+
+Install frontend dependencies:
+
+```powershell
 npm ci
+```
+
+Optional frontend environment configuration:
+
+```powershell
+Copy-Item .env.example .env.local
+```
+
+The frontend API URL should be:
+
+```dotenv
+VITE_API_BASE_URL=http://127.0.0.1:8000
+```
+
+The frontend is now ready.
+
+## 6. Run the Project Locally
+
+The backend and frontend run as separate services.
+
+**Important:** Keep both terminal windows running while using the dashboard.
+
+### 6.1 Start the FastAPI Backend — Terminal 1
+
+From the project root, run:
+
+```powershell
+cd backend
+```
+
+Start the backend:
+
+```powershell
+.\.venv\Scripts\python.exe -m uvicorn app.integration.api:create_app --factory --host 127.0.0.1 --port 8000
+```
+
+Expected terminal output:
+
+```text
+Application startup complete.
+Uvicorn running on http://127.0.0.1:8000
+```
+
+Backend endpoints:
+
+| Service | URL |
+|---|---|
+| API Base | http://127.0.0.1:8000 |
+| Health Check | http://127.0.0.1:8000/health |
+| Swagger API Docs | http://127.0.0.1:8000/docs |
+| Dataset Validation | http://127.0.0.1:8000/api/v1/dataset-validation |
+
+Verify the backend by opening:
+
+http://127.0.0.1:8000/health
+
+### 6.2 Start the React Frontend — Terminal 2
+
+From the project root, run:
+
+```powershell
+cd frontend
 npm run dev
 ```
 
-Open `http://127.0.0.1:5173`; API health is at `http://127.0.0.1:8000/health`.
+Expected output:
 
-### Automated tests
+```text
+VITE ready
+Local: http://127.0.0.1:5173/
+```
 
-A non-destructive Windows verifier is provided at [`scripts/VERIFY_FINAL_WINDOWS.ps1`](scripts/VERIFY_FINAL_WINDOWS.ps1). It runs the entire 16-module backend suite as **four disjoint batches**, then attempts frontend Vitest/build (and optionally read-only PostgreSQL verification and Playwright when explicitly requested). The script never runs full-scale generation or database migrations. It emits an honest PASS/FAIL/BLOCKED/NOT_RUN status file under `evidence/final_local_*`.
+Open the application:
+
+**http://127.0.0.1:5173**
+
+The welcome page provides two dashboard perspectives:
+
+- **Operations Manager:** Demand forecasts, inventory, replenishment recommendations, exceptions, and decision traces.
+- **Developer:** Technical architecture, data generation, forecasting methods, validation, and execution evidence.
+
+The dashboard depends on the FastAPI service being available. Database-backed views also require appropriate approved sample records. A fresh empty database will not automatically contain populated inventory or forecast runs.
+
+### 6.3 Stop the Application
+
+Press `Ctrl+C` in each running terminal.
+
+## 7. Optional: Start Backend and Frontend Using One Script
+
+The repository includes:
+
+```text
+START_PHASE5_WINDOWS.ps1
+```
+
+After installing backend/frontend dependencies and configuring the approved PostgreSQL database at migration `0005`, run from the project root:
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\START_PHASE5_WINDOWS.ps1
+```
+
+This script starts the local API and frontend processes and creates logs under `evidence/`.
+
+It only accepts the configured local isolated database `yottaflex_dual_v7` and requires ports `8000` and `5173` to be available.
+
+It does not run database migrations or full-scale data generation.
+
+If a server does not start correctly, inspect the generated logs or use the separate-terminal method in Section 6.
+
+## 8. Generate a Small Synthetic Dataset
+
+The repository includes a synthetic demo dataset:
+
+```text
+examples/smoke_run/
+```
+
+It also includes a labelled negative-scenario sample:
+
+```text
+examples/smoke_overlay_run/
+```
+
+To generate a fresh small dataset without modifying PostgreSQL, open a PowerShell terminal in `backend`:
+
+```powershell
+cd backend
+```
+
+Run:
+
+```powershell
+.\.venv\Scripts\python.exe -m app.generation.cli generate --profile smoke --out ..\new_smoke_output
+```
+
+Validate the output:
+
+```powershell
+.\.venv\Scripts\python.exe -m app.generation.cli validate --out ..\new_smoke_output
+```
+
+The output directory must be new or empty as required by the generator.
+
+Generated data includes SKU/store master records, sales, inventory snapshots, lead-time observations, validation metadata, and restricted ground-truth information.
+
+The five mandatory negative scenarios are represented through controlled labelled overlays, separate from valid baseline records.
+
+**Do not directly import invalid negative overlays into the production database.**
+
+For database import and pipeline execution, review the dedicated runbook before enabling write operations.
+
+## 9. Run Automated Tests
+
+### 9.1 Backend Tests
+
+From the `backend` directory:
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest tests -q --tb=short
+```
+
+The repository also provides a Windows verifier that runs the backend suite in four separate batches.
+
+### 9.2 Frontend Unit Tests
+
+From `frontend`:
+
+```powershell
+npm run test
+```
+
+### 9.3 Production Build
+
+```powershell
+npm run build
+```
+
+Production build output is generated in:
+
+```text
+frontend/dist/
+```
+
+### 9.4 Playwright Browser Tests
+
+Install the Chromium browser dependency if necessary:
+
+```powershell
+npx playwright install chromium
+```
+
+With the approved populated test database and both local services running:
+
+```powershell
+npx playwright test --project=chromium --reporter=list
+```
+
+Some browser tests interact with the local application. Use only an approved test environment.
+
+### 9.5 Unified Windows Verification
+
+From the project root:
 
 ```powershell
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\VERIFY_FINAL_WINDOWS.ps1
 ```
 
+For an additional read-only PostgreSQL verification:
 
 ```powershell
-# backend terminal, from backend/
-.\.venv\Scripts\python.exe -m pytest -q --tb=short
-
-# frontend terminal, from frontend/
-npx vitest run
-npm run build
-npx playwright test --project=chromium --reporter=list
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\VERIFY_FINAL_WINDOWS.ps1 -CheckPostgres
 ```
 
-Playwright's real-API tests require a running API with approved populated small demo records. Some API actions are state-changing; do not run live pipeline actions against unapproved databases. For the candidate's previously prepared isolated DB, the [One-Shot Acceptance](YottaFlex_V8_OneShot_Acceptance_Fixed.ps1) utility performs guarded checks and compares before/after table fingerprints.
+The verifier saves a local report under `evidence/final_local_*`.
 
-## Deterministic generation: small and medium
+It does not run full-scale generation, database resets, migrations, or GitHub pushes.
 
-The generator uses a fixed default seed `20261030`. Its CLI can generate and reproduce data **without connecting to PostgreSQL**:
-
-```powershell
-cd backend
-.\.venv\Scripts\python.exe -m app.generation.cli generate --profile smoke --out ..\new_smoke_output
-.\.venv\Scripts\python.exe -m app.generation.cli reproduce --profile smoke --out ..\new_reproduce_output
-```
-
-Output paths must be new/nonexistent. Do not write into bundled examples. The generator writes master CSVs, partitioned facts, separate restricted ground truth, negative fixtures, JSON manifest/checksums and SQL **master/policy seed only**. The SQL seed is not 73 million INSERT statements and should **not** be executed against the populated candidate database.
-
-### Required full-scale acceptance
-
-**2,000 × 100 × 365 = 73,000,000 potential SKU-store-day combinations.** Lifecycle effects reduce *eligible sales* rows. Expected eligible count from the current generator configuration is **70,794,200**, subject to actual full-run verification. The full profile uses Parquet and a 2-store output batch to contain RAM usage.
-
-Run from the repo root **only after** disk/RAM checks:
-
-```powershell
-# Install optional dependencies in the local backend virtual environment
-.\backend\.venv\Scripts\python.exe -m pip install -r .\backend\requirements-phase2.txt
-
-# Writes large generated outputs OUTSIDE OneDrive/project, default %LOCALAPPDATA%\YottaFlex_FullScale_Evidence
-.\scripts\RUN_FULL_SCALE_WINDOWS.ps1
-```
-
-The existing `app.generation.full_gate` performs a resource-guarded Parquet pilot, full generation and file validation, and an **independent logical streaming regeneration with SHA-256 comparison**. It refuses to run with insufficient **18 GiB free disk / 2 GiB available RAM**, plus pilot-estimated additional margins, and aborts if operating reserves fall too low. **Full-scale execution may be CPU/disk intensive and has no guaranteed completion time.** An aborted or missing `full_scale_acceptance.json` with status `PASS` must be reported as NOT COMPLETE.
-
-Generated full-scale artifacts should not be committed: keep only the acceptance JSON, reproducibility JSON and limited manifest summary after successful execution. This test **does not** prove bulk PostgreSQL import, large-data model training or dashboard load performance.
-
-## Validation and evidence
-
-| Verified area | Evidence |
-|---|---|
-| Candidate Windows smoke acceptance | 12 PASS / 0 FAIL / 5 WARN; 192 backend tests passed, 1 skipped; 8 unit tests; 7 browser E2E tests; database count/hash integrity |
-| Backend API optimization | Recommendation list: 101.28 KB -> 18.63 KB (81.60% smaller), 61.40 ms -> 15.62 ms average in a local 5-request benchmark |
-| Independent medium-scale generation | 100 SKUs, 10 stores, 90 days, 86,490 sales, 72 files/333,745 logical rows checked in second streaming pass, PASS |
-| Full 2,000 × 100 × 365 Parquet | **NOT VERIFIED** (candidate attempts blocked by low free RAM; assistant environment missing optional Parquet dependency) |
-
-See [`docs/FINAL_ACCEPTANCE_STATUS.md`](docs/FINAL_ACCEPTANCE_STATUS.md) and compact reports in `evidence/`. The sample data are synthetic and have no external retail customer provenance.
-
-## AI transparency and submission
-
-This project involved **substantial AI assistance**. Candidate prompt instructions, in a deliberately prompt-only format, are in [`docs/AI_PROMPT_HISTORY.md`](docs/AI_PROMPT_HISTORY.md); an explicit **incomplete-exact-history disclosure** is included there because prior unseen prompts cannot be reconstructed verbatim. Full prompt export from all AI tools remains the candidate's responsibility. [`docs/AI_ASSISTANCE_DISCLOSURE.md`](docs/AI_ASSISTANCE_DISCLOSURE.md) explains assistance, personal testing evidence and limitations.
-
-The official YottaFlex FAQ asks for **a new dedicated public GitHub repository**, executable instructions, meaningful commits, **all prompts across AI tools**, transparent AI contribution, and the link sent from the **same recruitment email address**. Deadline is 72 hours after the recruiter email's recorded send time/time zone; no hosted demo or automated test suite is strictly required. See [`docs/SUBMISSION_REQUIREMENTS.md`](docs/SUBMISSION_REQUIREMENTS.md).
-
-## Project structure
+## 10. Project Structure
 
 ```text
-backend/app/                  Schema, synthetic generator, forecasting, replenishment, API
-backend/alembic/              PostgreSQL migrations
-backend/tests/                Regression tests
-frontend/src/                 React dashboard
-frontend/e2e/                 Playwright tests (real API)
-docs/data_dictionary.json     10-entity contract
-scripts/RUN_FULL_SCALE_WINDOWS.ps1  Resource-guarded full data acceptance
-docs/AI_PROMPT_HISTORY.md     User prompts only, with transparent export gaps
-docs/AI_ASSISTANCE_DISCLOSURE.md
-examples/smoke_run/          Non-sensitive synthetic sample
- evidence/                    Curated summaries only, not huge datasets
+YottaFlex_AI_FINAL_Submission/
+|
+|-- backend/
+|   |-- app/
+|   |   |-- forecasting/
+|   |   |-- generation/
+|   |   |-- integration/
+|   |   |-- replenishment/
+|   |-- alembic/
+|   |-- tests/
+|   |-- requirements.txt
+|   |-- requirements-phase5.txt
+|
+|-- frontend/
+|   |-- src/
+|   |-- e2e/
+|   |-- package.json
+|   |-- package-lock.json
+|
+|-- examples/
+|   |-- smoke_run/
+|   |-- smoke_overlay_run/
+|
+|-- evidence/
+|-- docs/
+|-- scripts/
+|
+|-- START_PHASE5_WINDOWS.ps1
+|-- FINAL_WINDOWS_RUNBOOK.md
+|-- FINAL_IMPLEMENTATION_REPORT.md
+|-- FINAL_ACCEPTANCE_MATRIX.md
+|-- GITHUB_SUBMISSION_AUDIT.md
+|-- README.md
 ```
 
-**Current limitations:** Not a publicly hardened production service; authentication/RBAC not implemented in the localhost challenge demo. Full-scale Parquet acceptance, live concurrent/failure recovery, large-dataset database/import performance and response load testing remain unverified. No live purchase-order execution is provided. The JavaScript bundle is relatively large (about 693 KB minified) and code splitting remains an optional improvement.
+## 11. Core Features
 
-## GitHub publication
+- Deterministic synthetic retail data generation.
+- Ten mandatory retail planning entities.
+- Store/SKU demand forecasting.
+- Forecast validation and explainability.
+- Stockout-aware demand handling.
+- Labelled negative-scenario overlays.
+- Inventory replenishment recommendations.
+- MOQ, pack-size and capacity constraints.
+- Date-effective SKU lifecycle eligibility.
+- Optional verified open-order input.
+- Per-recommendation decision traces.
+- PostgreSQL persistence and execution history.
+- FastAPI endpoints.
+- React Operations Manager dashboard.
+- React Developer dashboard.
+- Small-scale business outcome backtesting.
+- Automated backend, frontend and integration tests.
 
-Create a **new dedicated public repository** on GitHub. From this clean project folder:
+## 12. Technology Stack
 
-```powershell
-git init
-git add .
-git status --short
-git commit -m "Submit verified YottaFlex full-stack challenge implementation"
-git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/YOUR_NEW_REPO.git
-git push -u origin main
-```
+| Layer | Technology |
+|---|---|
+| Frontend | React, TypeScript, Vite |
+| Backend | Python, FastAPI |
+| Database | PostgreSQL |
+| ORM | SQLAlchemy |
+| Migrations | Alembic |
+| Forecasting | Statistical and machine-learning models |
+| Testing | Pytest, Vitest, Playwright |
+| Data Processing | CSV, optional Parquet |
+| Version Control | Git and GitHub |
 
-Replace placeholder values; do not pretend a GitHub repo or commits already exist. Retain meaningful actual subsequent commits for changes you personally make, not fabricated retrospective history. **Check `git status`, inspect staged files, and verify no secrets before pushing.** Send the public link using the recruitment email address and follow the recruiter instructions before the recorded deadline.
+## 13. Verification Status and Limitations
 
-**Recovering exact prompts:** A local helper, `scripts/EXTRACT_USER_PROMPTS_FROM_EXPORT.py`, can extract user-authored text messages from a ChatGPT `conversations.json` export filtered by conversation title. Review and redact the result before publication; it never publishes or sends your export. See `docs/AI_PROMPT_HISTORY.md`.
+The enhanced source has recorded the following verification:
 
-## Enhanced-source verification snapshot
+- Backend regression: **200 passed, 1 skipped, 0 failed**, executed across four disjoint batches.
+- Enhanced TypeScript typecheck: passed.
+- Small dataset generation and validation: passed.
+- Five labelled negative-scenario overlays: verified on small sample data.
+- Small forecasting/replenishment pipeline: verified.
+- Small business backtest: executed.
 
-On the updated repository, all backend test files were run in four **disjoint** process-isolated groups: **200 passed, 1 skipped, 0 failed**. A single-process full-suite run was attempted but exceeded the execution environment limit; no single-process PASS is asserted. Generation, five negative overlays, forecast artifact verification, replenishment verification and an evaluation-only small counterfactual passed on small data. The bounded CSV pilot (100 × 8 × 90) produced 69,192 eligible sales rows and passed validation. Refer to `FINAL_ACCEPTANCE_MATRIX.md` before any stronger acceptance claim.
+Additional local acceptance is still required for the modified frontend Vitest/Vite/Playwright release, live PostgreSQL concurrency, and full-scale processing.
+
+The target full-scale configuration is:
+
+**2,000 SKUs × 100 stores × 365 days**, representing 73,000,000 potential combinations before lifecycle filtering.
+
+Full-scale acceptance has **not** been independently completed. Resource preflight and separate execution are required.
+
+This project is a local-first coding challenge implementation, not a publicly hardened commercial service. Authentication/RBAC, full-scale load testing and complete purchase-order lifecycle execution are not implemented or fully verified.
+
+See:
+
+- [Final Acceptance Matrix](FINAL_ACCEPTANCE_MATRIX.md)
+- [Final Implementation Report](FINAL_IMPLEMENTATION_REPORT.md)
+- [Windows Runbook](FINAL_WINDOWS_RUNBOOK.md)
+
+## 14. AI Assistance and Documentation
+
+AI tools were used extensively during design, implementation, debugging, validation and documentation.
+
+Relevant documentation:
+
+- [AI Prompt History](docs/AI_PROMPT_HISTORY.md)
+- [AI Assistance Disclosure](docs/AI_ASSISTANCE_DISCLOSURE.md)
+- [Requirements Matrix](docs/REQUIREMENTS_MATRIX.md)
+- [Architecture Decisions](docs/architecture_decisions.md)
+- [Data Dictionary](docs/data_dictionary.json)
+
+The prompt-history file contains available/recovered prompts and does not claim to be a complete verbatim export of every AI interaction.
+
+## 15. Security Notes
+
+- Never commit `backend/.env` or `frontend/.env.local`.
+- Never expose PostgreSQL credentials, API keys or private tokens.
+- Do not commit `backend/.venv`, `frontend/node_modules` or large generated datasets.
+- Keep the backend bound to localhost for the local challenge demo.
+- Do not run destructive migrations or imports on an unapproved database.
+- Review Git changes before public publication.
+
+## 16. Author
+
+**Aaditya Hammad**
+
+GitHub: https://github.com/aadityahammad-2002
+
+**Project:** YottaFlex AI — Demand Forecasting & Inventory Replenishment
+
+**Challenge:** AI Forward Deployed Engineer — 72-Hour Coding Challenge
