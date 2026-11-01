@@ -1,0 +1,38 @@
+{
+  "scope": "SQLite-only controlled 266 synthetic ledger jobs, no business rows, local in-memory TestClient",
+  "baseline": {
+    "queries": [
+      259,
+      259,
+      259,
+      259,
+      259
+    ],
+    "latency_ms": [
+      57.6,
+      44.01,
+      45.78,
+      46.14,
+      54.51
+    ],
+    "mean_latency_ms": 49.61
+  },
+  "patched": {
+    "queries": [
+      10,
+      10,
+      10,
+      10,
+      10
+    ],
+    "latency_ms": [
+      13.01,
+      8.72,
+      6.43,
+      5.98,
+      5.62
+    ],
+    "mean_latency_ms": 7.96
+  },
+  "note": "Small isolated microbenchmark; not real PostgreSQL workload or production SLA."
+}

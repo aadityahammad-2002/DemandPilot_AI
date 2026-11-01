@@ -1,0 +1,2 @@
+observation_id,supplier_sku_id,order_date,expected_receipt_date,actual_receipt_date,observed_lead_time_days,delay_days,status
+LTO-000001,SSKU-000001,2026-01-01,2026-01-06,2026-01-07,-3,1,RECEIVED

@@ -1,0 +1,15 @@
+﻿{
+    "samples_ms":  [
+                       15.4754,
+                       15.1097,
+                       15.548200000000001,
+                       15.4632,
+                       16.5137
+                   ],
+    "average_ms":  15.62,
+    "payload_kb":  18.63,
+    "payload_reduction_pct":  81.6,
+    "historical_before_ms":  61.4,
+    "historical_before_kb":  101.28,
+    "latency_change_vs_historical_pct":  74.56
+}

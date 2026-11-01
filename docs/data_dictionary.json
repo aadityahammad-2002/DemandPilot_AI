@@ -1,0 +1,2352 @@
+{
+  "core_entities": {
+    "Forecast": {
+      "constraints": [
+        "UniqueConstraint(Column('run_id', String(length=80), table=<forecast>, nullable=False), Column('model_version', String(length=60), table=<forecast>, nullable=False), Column('sku_id', String(length=10), ForeignKey('sku.sku_id'), table=<forecast>, nullable=False), Column('store_id', String(length=12), ForeignKey('store.store_id'), table=<forecast>, nullable=False), Column('forecast_origin', Date(), table=<forecast>, nullable=False), Column('target_date', Date(), table=<forecast>, nullable=False))",
+        "CheckConstraint(<sqlalchemy.sql.elements.TextClause object at 0x7f1950ee9a20>, name='ck_forecast_forecast_future', table=Table('forecast', MetaData(), Column('forecast_id', String(length=110), table=<forecast>, primary_key=True, nullable=False), Column('sku_id', String(length=10), ForeignKey('sku.sku_id'), table=<forecast>, nullable=False), Column('store_id', String(length=12), ForeignKey('store.store_id'), table=<forecast>, nullable=False), Column('forecast_origin', Date(), table=<forecast>, nullable=False), Column('target_date', Date(), table=<forecast>, nullable=False), Column('predicted_units', Float(), table=<forecast>, nullable=False), Column('model_version', String(length=60), table=<forecast>, nullable=False), Column('run_id', String(length=80), table=<forecast>, nullable=False), Column('status', String(length=16), table=<forecast>, nullable=False), schema=None))",
+        "ForeignKeyConstraint(<sqlalchemy.sql.base.ReadOnlyColumnCollection object at 0x7f1950fb85e0>, None, name='fk_forecast_sku_id_sku', table=Table('forecast', MetaData(), Column('forecast_id', String(length=110), table=<forecast>, primary_key=True, nullable=False), Column('sku_id', String(length=10), ForeignKey('sku.sku_id'), table=<forecast>, nullable=False), Column('store_id', String(length=12), ForeignKey('store.store_id'), table=<forecast>, nullable=False), Column('forecast_origin', Date(), table=<forecast>, nullable=False), Column('target_date', Date(), table=<forecast>, nullable=False), Column('predicted_units', Float(), table=<forecast>, nullable=False), Column('model_version', String(length=60), table=<forecast>, nullable=False), Column('run_id', String(length=80), table=<forecast>, nullable=False), Column('status', String(length=16), table=<forecast>, nullable=False), schema=None))",
+        "CheckConstraint(<sqlalchemy.sql.elements.TextClause object at 0x7f1950ee9940>, name='ck_forecast_forecast_nonnegative', table=Table('forecast', MetaData(), Column('forecast_id', String(length=110), table=<forecast>, primary_key=True, nullable=False), Column('sku_id', String(length=10), ForeignKey('sku.sku_id'), table=<forecast>, nullable=False), Column('store_id', String(length=12), ForeignKey('store.store_id'), table=<forecast>, nullable=False), Column('forecast_origin', Date(), table=<forecast>, nullable=False), Column('target_date', Date(), table=<forecast>, nullable=False), Column('predicted_units', Float(), table=<forecast>, nullable=False), Column('model_version', String(length=60), table=<forecast>, nullable=False), Column('run_id', String(length=80), table=<forecast>, nullable=False), Column('status', String(length=16), table=<forecast>, nullable=False), schema=None))",
+        "ForeignKeyConstraint(<sqlalchemy.sql.base.ReadOnlyColumnCollection object at 0x7f1950fb8630>, None, name='fk_forecast_store_id_store', table=Table('forecast', MetaData(), Column('forecast_id', String(length=110), table=<forecast>, primary_key=True, nullable=False), Column('sku_id', String(length=10), ForeignKey('sku.sku_id'), table=<forecast>, nullable=False), Column('store_id', String(length=12), ForeignKey('store.store_id'), table=<forecast>, nullable=False), Column('forecast_origin', Date(), table=<forecast>, nullable=False), Column('target_date', Date(), table=<forecast>, nullable=False), Column('predicted_units', Float(), table=<forecast>, nullable=False), Column('model_version', String(length=60), table=<forecast>, nullable=False), Column('run_id', String(length=80), table=<forecast>, nullable=False), Column('status', String(length=16), table=<forecast>, nullable=False), schema=None))",
+        "PrimaryKeyConstraint(Column('forecast_id', String(length=110), table=<forecast>, primary_key=True, nullable=False))",
+        "CheckConstraint(<sqlalchemy.sql.elements.TextClause object at 0x7f1950ee98d0>, name='ck_forecast_forecast_status', table=Table('forecast', MetaData(), Column('forecast_id', String(length=110), table=<forecast>, primary_key=True, nullable=False), Column('sku_id', String(length=10), ForeignKey('sku.sku_id'), table=<forecast>, nullable=False), Column('store_id', String(length=12), ForeignKey('store.store_id'), table=<forecast>, nullable=False), Column('forecast_origin', Date(), table=<forecast>, nullable=False), Column('target_date', Date(), table=<forecast>, nullable=False), Column('predicted_units', Float(), table=<forecast>, nullable=False), Column('model_version', String(length=60), table=<forecast>, nullable=False), Column('run_id', String(length=80), table=<forecast>, nullable=False), Column('status', String(length=16), table=<forecast>, nullable=False), schema=None))"
+      ],
+      "fields": [
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Deterministic store/SKU/month forecast identity plus version/sequence suffix",
+          "example": "FC-STORE-000001-SKU-000001-2026-01",
+          "field": "forecast_id",
+          "foreign_keys": [],
+          "primary_key": true,
+          "required": true,
+          "type": "VARCHAR(110)",
+          "unique": true,
+          "unique_scopes": [],
+          "units": "id",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Product identity",
+          "example": null,
+          "field": "sku_id",
+          "foreign_keys": [
+            "sku.sku_id"
+          ],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(10)",
+          "unique": false,
+          "unique_scopes": [
+            "run_id,model_version,sku_id,store_id,forecast_origin,target_date"
+          ],
+          "units": "id",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Store identity",
+          "example": null,
+          "field": "store_id",
+          "foreign_keys": [
+            "store.store_id"
+          ],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(12)",
+          "unique": false,
+          "unique_scopes": [
+            "run_id,model_version,sku_id,store_id,forecast_origin,target_date"
+          ],
+          "units": "id",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Forecast origin",
+          "example": null,
+          "field": "forecast_origin",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "DATE",
+          "unique": false,
+          "unique_scopes": [
+            "run_id,model_version,sku_id,store_id,forecast_origin,target_date"
+          ],
+          "units": "date",
+          "validation_rules": [
+            "target_date > forecast_origin"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Target date",
+          "example": null,
+          "field": "target_date",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "DATE",
+          "unique": false,
+          "unique_scopes": [
+            "run_id,model_version,sku_id,store_id,forecast_origin,target_date"
+          ],
+          "units": "date",
+          "validation_rules": [
+            "target_date > forecast_origin"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Nonnegative expected future demand",
+          "example": null,
+          "field": "predicted_units",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "FLOAT",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "quantity",
+          "validation_rules": [
+            "predicted_units >= 0"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Model version",
+          "example": null,
+          "field": "model_version",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(60)",
+          "unique": false,
+          "unique_scopes": [
+            "run_id,model_version,sku_id,store_id,forecast_origin,target_date"
+          ],
+          "units": "text",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Run id",
+          "example": null,
+          "field": "run_id",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(80)",
+          "unique": false,
+          "unique_scopes": [
+            "run_id,model_version,sku_id,store_id,forecast_origin,target_date"
+          ],
+          "units": "id",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": [
+            "GENERATED",
+            "VALIDATED",
+            "PUBLISHED",
+            "REJECTED"
+          ],
+          "default": null,
+          "description": "Lifecycle state",
+          "example": null,
+          "field": "status",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(16)",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "text",
+          "validation_rules": [
+            "status IN ('GENERATED','VALIDATED','PUBLISHED','REJECTED')"
+          ]
+        }
+      ],
+      "indexes": [
+        "Index('idx_forecast_run_target', Column('run_id', String(length=80), table=<forecast>, nullable=False), Column('target_date', Date(), table=<forecast>, nullable=False))"
+      ],
+      "table": "forecast"
+    },
+    "InventorySnapshot": {
+      "constraints": [
+        "CheckConstraint(<sqlalchemy.sql.elements.TextClause object at 0x7f1950ee84b0>, name='ck_inventory_snapshot_inventory_reserves', table=Table('inventory_snapshot', MetaData(), Column('inventory_id', String(length=64), table=<inventory_snapshot>, primary_key=True, nullable=False), Column('sku_id', String(length=10), ForeignKey('sku.sku_id'), table=<inventory_snapshot>, nullable=False), Column('store_id', String(length=12), ForeignKey('store.store_id'), table=<inventory_snapshot>, nullable=False), Column('snapshot_date', Date(), table=<inventory_snapshot>, nullable=False), Column('opening_stock', Integer(), table=<inventory_snapshot>, nullable=False), Column('received_units', Integer(), table=<inventory_snapshot>, nullable=False), Column('sold_units', Integer(), table=<inventory_snapshot>, nullable=False), Column('adjustment_units', Integer(), table=<inventory_snapshot>, nullable=False, default=ScalarElementColumnDefault(0)), Column('closing_stock', Integer(), table=<inventory_snapshot>, nullable=False), Column('reserved_units', Integer(), table=<inventory_snapshot>, nullable=False, default=ScalarElementColumnDefault(0)), schema=None))",
+        "ForeignKeyConstraint(<sqlalchemy.sql.base.ReadOnlyColumnCollection object at 0x7f1950f9c130>, None, name='fk_inventory_snapshot_sku_id_sku', table=Table('inventory_snapshot', MetaData(), Column('inventory_id', String(length=64), table=<inventory_snapshot>, primary_key=True, nullable=False), Column('sku_id', String(length=10), ForeignKey('sku.sku_id'), table=<inventory_snapshot>, nullable=False), Column('store_id', String(length=12), ForeignKey('store.store_id'), table=<inventory_snapshot>, nullable=False), Column('snapshot_date', Date(), table=<inventory_snapshot>, nullable=False), Column('opening_stock', Integer(), table=<inventory_snapshot>, nullable=False), Column('received_units', Integer(), table=<inventory_snapshot>, nullable=False), Column('sold_units', Integer(), table=<inventory_snapshot>, nullable=False), Column('adjustment_units', Integer(), table=<inventory_snapshot>, nullable=False, default=ScalarElementColumnDefault(0)), Column('closing_stock', Integer(), table=<inventory_snapshot>, nullable=False), Column('reserved_units', Integer(), table=<inventory_snapshot>, nullable=False, default=ScalarElementColumnDefault(0)), schema=None))",
+        "CheckConstraint(<sqlalchemy.sql.elements.TextClause object at 0x7f1950ee8e50>, name='ck_inventory_snapshot_inventory_nonnegative', table=Table('inventory_snapshot', MetaData(), Column('inventory_id', String(length=64), table=<inventory_snapshot>, primary_key=True, nullable=False), Column('sku_id', String(length=10), ForeignKey('sku.sku_id'), table=<inventory_snapshot>, nullable=False), Column('store_id', String(length=12), ForeignKey('store.store_id'), table=<inventory_snapshot>, nullable=False), Column('snapshot_date', Date(), table=<inventory_snapshot>, nullable=False), Column('opening_stock', Integer(), table=<inventory_snapshot>, nullable=False), Column('received_units', Integer(), table=<inventory_snapshot>, nullable=False), Column('sold_units', Integer(), table=<inventory_snapshot>, nullable=False), Column('adjustment_units', Integer(), table=<inventory_snapshot>, nullable=False, default=ScalarElementColumnDefault(0)), Column('closing_stock', Integer(), table=<inventory_snapshot>, nullable=False), Column('reserved_units', Integer(), table=<inventory_snapshot>, nullable=False, default=ScalarElementColumnDefault(0)), schema=None))",
+        "CheckConstraint(<sqlalchemy.sql.elements.TextClause object at 0x7f1950ee8d70>, name='ck_inventory_snapshot_inventory_balance', table=Table('inventory_snapshot', MetaData(), Column('inventory_id', String(length=64), table=<inventory_snapshot>, primary_key=True, nullable=False), Column('sku_id', String(length=10), ForeignKey('sku.sku_id'), table=<inventory_snapshot>, nullable=False), Column('store_id', String(length=12), ForeignKey('store.store_id'), table=<inventory_snapshot>, nullable=False), Column('snapshot_date', Date(), table=<inventory_snapshot>, nullable=False), Column('opening_stock', Integer(), table=<inventory_snapshot>, nullable=False), Column('received_units', Integer(), table=<inventory_snapshot>, nullable=False), Column('sold_units', Integer(), table=<inventory_snapshot>, nullable=False), Column('adjustment_units', Integer(), table=<inventory_snapshot>, nullable=False, default=ScalarElementColumnDefault(0)), Column('closing_stock', Integer(), table=<inventory_snapshot>, nullable=False), Column('reserved_units', Integer(), table=<inventory_snapshot>, nullable=False, default=ScalarElementColumnDefault(0)), schema=None))",
+        "UniqueConstraint(Column('sku_id', String(length=10), ForeignKey('sku.sku_id'), table=<inventory_snapshot>, nullable=False), Column('store_id', String(length=12), ForeignKey('store.store_id'), table=<inventory_snapshot>, nullable=False), Column('snapshot_date', Date(), table=<inventory_snapshot>, nullable=False))",
+        "PrimaryKeyConstraint(Column('inventory_id', String(length=64), table=<inventory_snapshot>, primary_key=True, nullable=False))",
+        "ForeignKeyConstraint(<sqlalchemy.sql.base.ReadOnlyColumnCollection object at 0x7f1950f9c0e0>, None, name='fk_inventory_snapshot_store_id_store', table=Table('inventory_snapshot', MetaData(), Column('inventory_id', String(length=64), table=<inventory_snapshot>, primary_key=True, nullable=False), Column('sku_id', String(length=10), ForeignKey('sku.sku_id'), table=<inventory_snapshot>, nullable=False), Column('store_id', String(length=12), ForeignKey('store.store_id'), table=<inventory_snapshot>, nullable=False), Column('snapshot_date', Date(), table=<inventory_snapshot>, nullable=False), Column('opening_stock', Integer(), table=<inventory_snapshot>, nullable=False), Column('received_units', Integer(), table=<inventory_snapshot>, nullable=False), Column('sold_units', Integer(), table=<inventory_snapshot>, nullable=False), Column('adjustment_units', Integer(), table=<inventory_snapshot>, nullable=False, default=ScalarElementColumnDefault(0)), Column('closing_stock', Integer(), table=<inventory_snapshot>, nullable=False), Column('reserved_units', Integer(), table=<inventory_snapshot>, nullable=False, default=ScalarElementColumnDefault(0)), schema=None))"
+      ],
+      "fields": [
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Deterministic SKU/store/day snapshot identity",
+          "example": null,
+          "field": "inventory_id",
+          "foreign_keys": [],
+          "primary_key": true,
+          "required": true,
+          "type": "VARCHAR(64)",
+          "unique": true,
+          "unique_scopes": [],
+          "units": "id",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Product identity",
+          "example": null,
+          "field": "sku_id",
+          "foreign_keys": [
+            "sku.sku_id"
+          ],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(10)",
+          "unique": false,
+          "unique_scopes": [
+            "sku_id,store_id,snapshot_date"
+          ],
+          "units": "id",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Store identity",
+          "example": null,
+          "field": "store_id",
+          "foreign_keys": [
+            "store.store_id"
+          ],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(12)",
+          "unique": false,
+          "unique_scopes": [
+            "sku_id,store_id,snapshot_date"
+          ],
+          "units": "id",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Snapshot date",
+          "example": null,
+          "field": "snapshot_date",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "DATE",
+          "unique": false,
+          "unique_scopes": [
+            "sku_id,store_id,snapshot_date"
+          ],
+          "units": "date",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Opening stock",
+          "example": null,
+          "field": "opening_stock",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "INTEGER",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "quantity",
+          "validation_rules": [
+            "opening_stock >= 0 AND received_units >= 0 AND sold_units >= 0 AND closing_stock >= 0 AND reserved_units >= 0",
+            "closing_stock = opening_stock + received_units - sold_units + adjustment_units"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Received units",
+          "example": null,
+          "field": "received_units",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "INTEGER",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "quantity",
+          "validation_rules": [
+            "opening_stock >= 0 AND received_units >= 0 AND sold_units >= 0 AND closing_stock >= 0 AND reserved_units >= 0",
+            "closing_stock = opening_stock + received_units - sold_units + adjustment_units"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Sold units",
+          "example": null,
+          "field": "sold_units",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "INTEGER",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "quantity",
+          "validation_rules": [
+            "opening_stock >= 0 AND received_units >= 0 AND sold_units >= 0 AND closing_stock >= 0 AND reserved_units >= 0",
+            "closing_stock = opening_stock + received_units - sold_units + adjustment_units"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": "0",
+          "description": "Signed shrinkage/correction units",
+          "example": null,
+          "field": "adjustment_units",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "INTEGER",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "quantity",
+          "validation_rules": [
+            "closing_stock = opening_stock + received_units - sold_units + adjustment_units"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Closing stock",
+          "example": null,
+          "field": "closing_stock",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "INTEGER",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "quantity",
+          "validation_rules": [
+            "reserved_units <= closing_stock",
+            "opening_stock >= 0 AND received_units >= 0 AND sold_units >= 0 AND closing_stock >= 0 AND reserved_units >= 0",
+            "closing_stock = opening_stock + received_units - sold_units + adjustment_units"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": "0",
+          "description": "Part of closing inventory not available for fulfillment",
+          "example": null,
+          "field": "reserved_units",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "INTEGER",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "quantity",
+          "validation_rules": [
+            "reserved_units <= closing_stock",
+            "opening_stock >= 0 AND received_units >= 0 AND sold_units >= 0 AND closing_stock >= 0 AND reserved_units >= 0"
+          ]
+        }
+      ],
+      "indexes": [
+        "Index('idx_inventory_date_store', Column('snapshot_date', Date(), table=<inventory_snapshot>, nullable=False), Column('store_id', String(length=12), ForeignKey('store.store_id'), table=<inventory_snapshot>, nullable=False))"
+      ],
+      "table": "inventory_snapshot"
+    },
+    "LeadTimeObservation": {
+      "constraints": [
+        "CheckConstraint(<sqlalchemy.sql.elements.TextClause object at 0x7f1950ee8520>, name='ck_lead_time_observation_lead_derived', table=Table('lead_time_observation', MetaData(), Column('observation_id', String(length=16), table=<lead_time_observation>, primary_key=True, nullable=False), Column('supplier_sku_id', String(length=12), ForeignKey('supplier_sku.supplier_sku_id'), table=<lead_time_observation>, nullable=False), Column('order_date', Date(), table=<lead_time_observation>, nullable=False), Column('expected_receipt_date', Date(), table=<lead_time_observation>, nullable=False), Column('actual_receipt_date', Date(), table=<lead_time_observation>), Column('observed_lead_time_days', Integer(), table=<lead_time_observation>), Column('delay_days', Integer(), table=<lead_time_observation>), Column('status', String(length=16), table=<lead_time_observation>, nullable=False), schema=None))",
+        "ForeignKeyConstraint(<sqlalchemy.sql.base.ReadOnlyColumnCollection object at 0x7f1950f9f790>, None, name='fk_lead_time_observation_supplier_sku_id_supplier_sku', table=Table('lead_time_observation', MetaData(), Column('observation_id', String(length=16), table=<lead_time_observation>, primary_key=True, nullable=False), Column('supplier_sku_id', String(length=12), ForeignKey('supplier_sku.supplier_sku_id'), table=<lead_time_observation>, nullable=False), Column('order_date', Date(), table=<lead_time_observation>, nullable=False), Column('expected_receipt_date', Date(), table=<lead_time_observation>, nullable=False), Column('actual_receipt_date', Date(), table=<lead_time_observation>), Column('observed_lead_time_days', Integer(), table=<lead_time_observation>), Column('delay_days', Integer(), table=<lead_time_observation>), Column('status', String(length=16), table=<lead_time_observation>, nullable=False), schema=None))",
+        "CheckConstraint(<sqlalchemy.sql.elements.TextClause object at 0x7f1950ee9320>, name='ck_lead_time_observation_lead_actual', table=Table('lead_time_observation', MetaData(), Column('observation_id', String(length=16), table=<lead_time_observation>, primary_key=True, nullable=False), Column('supplier_sku_id', String(length=12), ForeignKey('supplier_sku.supplier_sku_id'), table=<lead_time_observation>, nullable=False), Column('order_date', Date(), table=<lead_time_observation>, nullable=False), Column('expected_receipt_date', Date(), table=<lead_time_observation>, nullable=False), Column('actual_receipt_date', Date(), table=<lead_time_observation>), Column('observed_lead_time_days', Integer(), table=<lead_time_observation>), Column('delay_days', Integer(), table=<lead_time_observation>), Column('status', String(length=16), table=<lead_time_observation>, nullable=False), schema=None))",
+        "CheckConstraint(<sqlalchemy.sql.elements.TextClause object at 0x7f1950ee94e0>, name='ck_lead_time_observation_lead_status', table=Table('lead_time_observation', MetaData(), Column('observation_id', String(length=16), table=<lead_time_observation>, primary_key=True, nullable=False), Column('supplier_sku_id', String(length=12), ForeignKey('supplier_sku.supplier_sku_id'), table=<lead_time_observation>, nullable=False), Column('order_date', Date(), table=<lead_time_observation>, nullable=False), Column('expected_receipt_date', Date(), table=<lead_time_observation>, nullable=False), Column('actual_receipt_date', Date(), table=<lead_time_observation>), Column('observed_lead_time_days', Integer(), table=<lead_time_observation>), Column('delay_days', Integer(), table=<lead_time_observation>), Column('status', String(length=16), table=<lead_time_observation>, nullable=False), schema=None))",
+        "PrimaryKeyConstraint(Column('observation_id', String(length=16), table=<lead_time_observation>, primary_key=True, nullable=False))",
+        "CheckConstraint(<sqlalchemy.sql.elements.TextClause object at 0x7f1950ee9240>, name='ck_lead_time_observation_lead_nonnegative', table=Table('lead_time_observation', MetaData(), Column('observation_id', String(length=16), table=<lead_time_observation>, primary_key=True, nullable=False), Column('supplier_sku_id', String(length=12), ForeignKey('supplier_sku.supplier_sku_id'), table=<lead_time_observation>, nullable=False), Column('order_date', Date(), table=<lead_time_observation>, nullable=False), Column('expected_receipt_date', Date(), table=<lead_time_observation>, nullable=False), Column('actual_receipt_date', Date(), table=<lead_time_observation>), Column('observed_lead_time_days', Integer(), table=<lead_time_observation>), Column('delay_days', Integer(), table=<lead_time_observation>), Column('status', String(length=16), table=<lead_time_observation>, nullable=False), schema=None))",
+        "CheckConstraint(<sqlalchemy.sql.elements.TextClause object at 0x7f1950ee9400>, name='ck_lead_time_observation_lead_expected', table=Table('lead_time_observation', MetaData(), Column('observation_id', String(length=16), table=<lead_time_observation>, primary_key=True, nullable=False), Column('supplier_sku_id', String(length=12), ForeignKey('supplier_sku.supplier_sku_id'), table=<lead_time_observation>, nullable=False), Column('order_date', Date(), table=<lead_time_observation>, nullable=False), Column('expected_receipt_date', Date(), table=<lead_time_observation>, nullable=False), Column('actual_receipt_date', Date(), table=<lead_time_observation>), Column('observed_lead_time_days', Integer(), table=<lead_time_observation>), Column('delay_days', Integer(), table=<lead_time_observation>), Column('status', String(length=16), table=<lead_time_observation>, nullable=False), schema=None))"
+      ],
+      "fields": [
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Observation id",
+          "example": null,
+          "field": "observation_id",
+          "foreign_keys": [],
+          "primary_key": true,
+          "required": true,
+          "type": "VARCHAR(16)",
+          "unique": true,
+          "unique_scopes": [],
+          "units": "id",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Supplier-to-product contract identity",
+          "example": null,
+          "field": "supplier_sku_id",
+          "foreign_keys": [
+            "supplier_sku.supplier_sku_id"
+          ],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(12)",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "id",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Order date",
+          "example": null,
+          "field": "order_date",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "DATE",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "date",
+          "validation_rules": [
+            "(status = 'RECEIVED' AND actual_receipt_date IS NOT NULL AND observed_lead_time_days = actual_receipt_date - order_date AND delay_days = actual_receipt_date - expected_receipt_date) OR (status <> 'RECEIVED' AND actual_receipt_date IS NULL AND observed_lead_time_days IS NULL AND delay_days IS NULL)",
+            "actual_receipt_date IS NULL OR actual_receipt_date >= order_date",
+            "expected_receipt_date >= order_date"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Expected receipt date",
+          "example": null,
+          "field": "expected_receipt_date",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "DATE",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "date",
+          "validation_rules": [
+            "(status = 'RECEIVED' AND actual_receipt_date IS NOT NULL AND observed_lead_time_days = actual_receipt_date - order_date AND delay_days = actual_receipt_date - expected_receipt_date) OR (status <> 'RECEIVED' AND actual_receipt_date IS NULL AND observed_lead_time_days IS NULL AND delay_days IS NULL)",
+            "expected_receipt_date >= order_date"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Actual receipt date",
+          "example": null,
+          "field": "actual_receipt_date",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": false,
+          "type": "DATE",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "date",
+          "validation_rules": [
+            "(status = 'RECEIVED' AND actual_receipt_date IS NOT NULL AND observed_lead_time_days = actual_receipt_date - order_date AND delay_days = actual_receipt_date - expected_receipt_date) OR (status <> 'RECEIVED' AND actual_receipt_date IS NULL AND observed_lead_time_days IS NULL AND delay_days IS NULL)",
+            "actual_receipt_date IS NULL OR actual_receipt_date >= order_date"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Actual receipt date minus order date, calculated not sampled",
+          "example": null,
+          "field": "observed_lead_time_days",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": false,
+          "type": "INTEGER",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "days",
+          "validation_rules": [
+            "(status = 'RECEIVED' AND actual_receipt_date IS NOT NULL AND observed_lead_time_days = actual_receipt_date - order_date AND delay_days = actual_receipt_date - expected_receipt_date) OR (status <> 'RECEIVED' AND actual_receipt_date IS NULL AND observed_lead_time_days IS NULL AND delay_days IS NULL)",
+            "observed_lead_time_days IS NULL OR observed_lead_time_days >= 0"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Actual receipt date minus expected receipt date (may be negative for early deliveries)",
+          "example": null,
+          "field": "delay_days",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": false,
+          "type": "INTEGER",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "days",
+          "validation_rules": [
+            "(status = 'RECEIVED' AND actual_receipt_date IS NOT NULL AND observed_lead_time_days = actual_receipt_date - order_date AND delay_days = actual_receipt_date - expected_receipt_date) OR (status <> 'RECEIVED' AND actual_receipt_date IS NULL AND observed_lead_time_days IS NULL AND delay_days IS NULL)"
+          ]
+        },
+        {
+          "allowed_values": [
+            "PLACED",
+            "DELAYED",
+            "RECEIVED",
+            "CANCELLED"
+          ],
+          "default": null,
+          "description": "Lifecycle state",
+          "example": null,
+          "field": "status",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(16)",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "text",
+          "validation_rules": [
+            "(status = 'RECEIVED' AND actual_receipt_date IS NOT NULL AND observed_lead_time_days = actual_receipt_date - order_date AND delay_days = actual_receipt_date - expected_receipt_date) OR (status <> 'RECEIVED' AND actual_receipt_date IS NULL AND observed_lead_time_days IS NULL AND delay_days IS NULL)",
+            "status IN ('PLACED','DELAYED','RECEIVED','CANCELLED')"
+          ]
+        }
+      ],
+      "indexes": [
+        "Index('idx_lead_contract_date', Column('supplier_sku_id', String(length=12), ForeignKey('supplier_sku.supplier_sku_id'), table=<lead_time_observation>, nullable=False), Column('order_date', Date(), table=<lead_time_observation>, nullable=False))"
+      ],
+      "table": "lead_time_observation"
+    },
+    "PurchaseRecommendation": {
+      "constraints": [
+        "ForeignKeyConstraint(<sqlalchemy.sql.base.ReadOnlyColumnCollection object at 0x7f1950f9e070>, None, name='fk_purchase_recommendation_store_id_store', table=Table('purchase_recommendation', MetaData(), Column('recommendation_id', String(length=24), table=<purchase_recommendation>, primary_key=True, nullable=False), Column('policy_id', String(length=16), ForeignKey('reorder_policy.policy_id'), table=<purchase_recommendation>, nullable=False), Column('sku_id', String(length=10), ForeignKey('sku.sku_id'), ForeignKey('supplier_sku.sku_id'), table=<purchase_recommendation>, nullable=False), Column('store_id', String(length=12), ForeignKey('store.store_id'), table=<purchase_recommendation>, nullable=False), Column('supplier_sku_id', String(length=12), ForeignKey('supplier_sku.supplier_sku_id'), table=<purchase_recommendation>, nullable=False), Column('decision_date', Date(), table=<purchase_recommendation>, nullable=False), Column('forecast_run_id', String(length=80), table=<purchase_recommendation>, nullable=False), Column('inventory_date', Date(), table=<purchase_recommendation>, nullable=False), Column('inventory_position', Integer(), table=<purchase_recommendation>, nullable=False), Column('lead_time_demand', Float(), table=<purchase_recommendation>, nullable=False), Column('raw_quantity', Integer(), table=<purchase_recommendation>, nullable=False), Column('recommended_quantity', Integer(), table=<purchase_recommendation>, nullable=False), Column('status', String(length=16), table=<purchase_recommendation>, nullable=False), Column('reason_codes', JSON(), table=<purchase_recommendation>, nullable=False), Column('rule_version', String(length=60), table=<purchase_recommendation>, nullable=False), Column('decision_trace', JSON(), table=<purchase_recommendation>, nullable=False), schema=None))",
+        "CheckConstraint(<sqlalchemy.sql.elements.TextClause object at 0x7f1950eea9e0>, name='ck_purchase_recommendation_rec_inventory_date', table=Table('purchase_recommendation', MetaData(), Column('recommendation_id', String(length=24), table=<purchase_recommendation>, primary_key=True, nullable=False), Column('policy_id', String(length=16), ForeignKey('reorder_policy.policy_id'), table=<purchase_recommendation>, nullable=False), Column('sku_id', String(length=10), ForeignKey('sku.sku_id'), ForeignKey('supplier_sku.sku_id'), table=<purchase_recommendation>, nullable=False), Column('store_id', String(length=12), ForeignKey('store.store_id'), table=<purchase_recommendation>, nullable=False), Column('supplier_sku_id', String(length=12), ForeignKey('supplier_sku.supplier_sku_id'), table=<purchase_recommendation>, nullable=False), Column('decision_date', Date(), table=<purchase_recommendation>, nullable=False), Column('forecast_run_id', String(length=80), table=<purchase_recommendation>, nullable=False), Column('inventory_date', Date(), table=<purchase_recommendation>, nullable=False), Column('inventory_position', Integer(), table=<purchase_recommendation>, nullable=False), Column('lead_time_demand', Float(), table=<purchase_recommendation>, nullable=False), Column('raw_quantity', Integer(), table=<purchase_recommendation>, nullable=False), Column('recommended_quantity', Integer(), table=<purchase_recommendation>, nullable=False), Column('status', String(length=16), table=<purchase_recommendation>, nullable=False), Column('reason_codes', JSON(), table=<purchase_recommendation>, nullable=False), Column('rule_version', String(length=60), table=<purchase_recommendation>, nullable=False), Column('decision_trace', JSON(), table=<purchase_recommendation>, nullable=False), schema=None))",
+        "ForeignKeyConstraint(<sqlalchemy.sql.base.ReadOnlyColumnCollection object at 0x7f1950f9dfd0>, None, name='fk_purchase_recommendation_sku_id_sku', table=Table('purchase_recommendation', MetaData(), Column('recommendation_id', String(length=24), table=<purchase_recommendation>, primary_key=True, nullable=False), Column('policy_id', String(length=16), ForeignKey('reorder_policy.policy_id'), table=<purchase_recommendation>, nullable=False), Column('sku_id', String(length=10), ForeignKey('sku.sku_id'), ForeignKey('supplier_sku.sku_id'), table=<purchase_recommendation>, nullable=False), Column('store_id', String(length=12), ForeignKey('store.store_id'), table=<purchase_recommendation>, nullable=False), Column('supplier_sku_id', String(length=12), ForeignKey('supplier_sku.supplier_sku_id'), table=<purchase_recommendation>, nullable=False), Column('decision_date', Date(), table=<purchase_recommendation>, nullable=False), Column('forecast_run_id', String(length=80), table=<purchase_recommendation>, nullable=False), Column('inventory_date', Date(), table=<purchase_recommendation>, nullable=False), Column('inventory_position', Integer(), table=<purchase_recommendation>, nullable=False), Column('lead_time_demand', Float(), table=<purchase_recommendation>, nullable=False), Column('raw_quantity', Integer(), table=<purchase_recommendation>, nullable=False), Column('recommended_quantity', Integer(), table=<purchase_recommendation>, nullable=False), Column('status', String(length=16), table=<purchase_recommendation>, nullable=False), Column('reason_codes', JSON(), table=<purchase_recommendation>, nullable=False), Column('rule_version', String(length=60), table=<purchase_recommendation>, nullable=False), Column('decision_trace', JSON(), table=<purchase_recommendation>, nullable=False), schema=None))",
+        "ForeignKeyConstraint(<sqlalchemy.sql.base.ReadOnlyColumnCollection object at 0x7f1950f9e020>, None, name='fk_purchase_recommendation_policy_id_reorder_policy', table=Table('purchase_recommendation', MetaData(), Column('recommendation_id', String(length=24), table=<purchase_recommendation>, primary_key=True, nullable=False), Column('policy_id', String(length=16), ForeignKey('reorder_policy.policy_id'), table=<purchase_recommendation>, nullable=False), Column('sku_id', String(length=10), ForeignKey('sku.sku_id'), ForeignKey('supplier_sku.sku_id'), table=<purchase_recommendation>, nullable=False), Column('store_id', String(length=12), ForeignKey('store.store_id'), table=<purchase_recommendation>, nullable=False), Column('supplier_sku_id', String(length=12), ForeignKey('supplier_sku.supplier_sku_id'), table=<purchase_recommendation>, nullable=False), Column('decision_date', Date(), table=<purchase_recommendation>, nullable=False), Column('forecast_run_id', String(length=80), table=<purchase_recommendation>, nullable=False), Column('inventory_date', Date(), table=<purchase_recommendation>, nullable=False), Column('inventory_position', Integer(), table=<purchase_recommendation>, nullable=False), Column('lead_time_demand', Float(), table=<purchase_recommendation>, nullable=False), Column('raw_quantity', Integer(), table=<purchase_recommendation>, nullable=False), Column('recommended_quantity', Integer(), table=<purchase_recommendation>, nullable=False), Column('status', String(length=16), table=<purchase_recommendation>, nullable=False), Column('reason_codes', JSON(), table=<purchase_recommendation>, nullable=False), Column('rule_version', String(length=60), table=<purchase_recommendation>, nullable=False), Column('decision_trace', JSON(), table=<purchase_recommendation>, nullable=False), schema=None))",
+        "PrimaryKeyConstraint(Column('recommendation_id', String(length=24), table=<purchase_recommendation>, primary_key=True, nullable=False))",
+        "CheckConstraint(<sqlalchemy.sql.elements.TextClause object at 0x7f1950eea890>, name='ck_purchase_recommendation_rec_status', table=Table('purchase_recommendation', MetaData(), Column('recommendation_id', String(length=24), table=<purchase_recommendation>, primary_key=True, nullable=False), Column('policy_id', String(length=16), ForeignKey('reorder_policy.policy_id'), table=<purchase_recommendation>, nullable=False), Column('sku_id', String(length=10), ForeignKey('sku.sku_id'), ForeignKey('supplier_sku.sku_id'), table=<purchase_recommendation>, nullable=False), Column('store_id', String(length=12), ForeignKey('store.store_id'), table=<purchase_recommendation>, nullable=False), Column('supplier_sku_id', String(length=12), ForeignKey('supplier_sku.supplier_sku_id'), table=<purchase_recommendation>, nullable=False), Column('decision_date', Date(), table=<purchase_recommendation>, nullable=False), Column('forecast_run_id', String(length=80), table=<purchase_recommendation>, nullable=False), Column('inventory_date', Date(), table=<purchase_recommendation>, nullable=False), Column('inventory_position', Integer(), table=<purchase_recommendation>, nullable=False), Column('lead_time_demand', Float(), table=<purchase_recommendation>, nullable=False), Column('raw_quantity', Integer(), table=<purchase_recommendation>, nullable=False), Column('recommended_quantity', Integer(), table=<purchase_recommendation>, nullable=False), Column('status', String(length=16), table=<purchase_recommendation>, nullable=False), Column('reason_codes', JSON(), table=<purchase_recommendation>, nullable=False), Column('rule_version', String(length=60), table=<purchase_recommendation>, nullable=False), Column('decision_trace', JSON(), table=<purchase_recommendation>, nullable=False), schema=None))",
+        "ForeignKeyConstraint(<sqlalchemy.sql.base.ReadOnlyColumnCollection object at 0x7f1950f9dee0>, None, name='fk_purchase_recommendation_supplier_sku_id_supplier_sku', table=Table('purchase_recommendation', MetaData(), Column('recommendation_id', String(length=24), table=<purchase_recommendation>, primary_key=True, nullable=False), Column('policy_id', String(length=16), ForeignKey('reorder_policy.policy_id'), table=<purchase_recommendation>, nullable=False), Column('sku_id', String(length=10), ForeignKey('sku.sku_id'), ForeignKey('supplier_sku.sku_id'), table=<purchase_recommendation>, nullable=False), Column('store_id', String(length=12), ForeignKey('store.store_id'), table=<purchase_recommendation>, nullable=False), Column('supplier_sku_id', String(length=12), ForeignKey('supplier_sku.supplier_sku_id'), table=<purchase_recommendation>, nullable=False), Column('decision_date', Date(), table=<purchase_recommendation>, nullable=False), Column('forecast_run_id', String(length=80), table=<purchase_recommendation>, nullable=False), Column('inventory_date', Date(), table=<purchase_recommendation>, nullable=False), Column('inventory_position', Integer(), table=<purchase_recommendation>, nullable=False), Column('lead_time_demand', Float(), table=<purchase_recommendation>, nullable=False), Column('raw_quantity', Integer(), table=<purchase_recommendation>, nullable=False), Column('recommended_quantity', Integer(), table=<purchase_recommendation>, nullable=False), Column('status', String(length=16), table=<purchase_recommendation>, nullable=False), Column('reason_codes', JSON(), table=<purchase_recommendation>, nullable=False), Column('rule_version', String(length=60), table=<purchase_recommendation>, nullable=False), Column('decision_trace', JSON(), table=<purchase_recommendation>, nullable=False), schema=None))",
+        "CheckConstraint(<sqlalchemy.sql.elements.TextClause object at 0x7f1950eea900>, name='ck_purchase_recommendation_rec_quantities', table=Table('purchase_recommendation', MetaData(), Column('recommendation_id', String(length=24), table=<purchase_recommendation>, primary_key=True, nullable=False), Column('policy_id', String(length=16), ForeignKey('reorder_policy.policy_id'), table=<purchase_recommendation>, nullable=False), Column('sku_id', String(length=10), ForeignKey('sku.sku_id'), ForeignKey('supplier_sku.sku_id'), table=<purchase_recommendation>, nullable=False), Column('store_id', String(length=12), ForeignKey('store.store_id'), table=<purchase_recommendation>, nullable=False), Column('supplier_sku_id', String(length=12), ForeignKey('supplier_sku.supplier_sku_id'), table=<purchase_recommendation>, nullable=False), Column('decision_date', Date(), table=<purchase_recommendation>, nullable=False), Column('forecast_run_id', String(length=80), table=<purchase_recommendation>, nullable=False), Column('inventory_date', Date(), table=<purchase_recommendation>, nullable=False), Column('inventory_position', Integer(), table=<purchase_recommendation>, nullable=False), Column('lead_time_demand', Float(), table=<purchase_recommendation>, nullable=False), Column('raw_quantity', Integer(), table=<purchase_recommendation>, nullable=False), Column('recommended_quantity', Integer(), table=<purchase_recommendation>, nullable=False), Column('status', String(length=16), table=<purchase_recommendation>, nullable=False), Column('reason_codes', JSON(), table=<purchase_recommendation>, nullable=False), Column('rule_version', String(length=60), table=<purchase_recommendation>, nullable=False), Column('decision_trace', JSON(), table=<purchase_recommendation>, nullable=False), schema=None))"
+      ],
+      "fields": [
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Deterministic year/ordinal decision identity",
+          "example": "PO-2026-000001",
+          "field": "recommendation_id",
+          "foreign_keys": [],
+          "primary_key": true,
+          "required": true,
+          "type": "VARCHAR(24)",
+          "unique": true,
+          "unique_scopes": [],
+          "units": "id",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Policy id",
+          "example": null,
+          "field": "policy_id",
+          "foreign_keys": [
+            "reorder_policy.policy_id"
+          ],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(16)",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "id",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Product identity",
+          "example": null,
+          "field": "sku_id",
+          "foreign_keys": [
+            "sku.sku_id",
+            "supplier_sku.sku_id"
+          ],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(10)",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "id",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Store identity",
+          "example": null,
+          "field": "store_id",
+          "foreign_keys": [
+            "store.store_id"
+          ],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(12)",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "id",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Supplier-to-product contract identity",
+          "example": null,
+          "field": "supplier_sku_id",
+          "foreign_keys": [
+            "supplier_sku.supplier_sku_id"
+          ],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(12)",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "id",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Decision date",
+          "example": null,
+          "field": "decision_date",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "DATE",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "date",
+          "validation_rules": [
+            "inventory_date <= decision_date"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Forecast run id",
+          "example": null,
+          "field": "forecast_run_id",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(80)",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "id",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Inventory date",
+          "example": null,
+          "field": "inventory_date",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "DATE",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "date",
+          "validation_rules": [
+            "inventory_date <= decision_date"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "On-hand plus documented pipeline minus commitments; may be negative",
+          "example": null,
+          "field": "inventory_position",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "INTEGER",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "quantity",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Lead time demand",
+          "example": null,
+          "field": "lead_time_demand",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "FLOAT",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "dimensionless",
+          "validation_rules": [
+            "lead_time_demand >= 0 AND raw_quantity >= 0 AND recommended_quantity >= 0"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Raw quantity",
+          "example": null,
+          "field": "raw_quantity",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "INTEGER",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "quantity",
+          "validation_rules": [
+            "lead_time_demand >= 0 AND raw_quantity >= 0 AND recommended_quantity >= 0"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Recommended quantity",
+          "example": null,
+          "field": "recommended_quantity",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "INTEGER",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "quantity",
+          "validation_rules": [
+            "lead_time_demand >= 0 AND raw_quantity >= 0 AND recommended_quantity >= 0"
+          ]
+        },
+        {
+          "allowed_values": [
+            "GENERATED",
+            "VALIDATED",
+            "ACCEPTED",
+            "REJECTED",
+            "EXPIRED",
+            "BLOCKED"
+          ],
+          "default": null,
+          "description": "Lifecycle state",
+          "example": null,
+          "field": "status",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(16)",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "text",
+          "validation_rules": [
+            "status IN ('GENERATED','VALIDATED','ACCEPTED','REJECTED','EXPIRED','BLOCKED')"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Machine-readable reason codes",
+          "example": null,
+          "field": "reason_codes",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "JSON",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "json",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Rule version",
+          "example": null,
+          "field": "rule_version",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(60)",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "text",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Versioned inputs and applied rules",
+          "example": null,
+          "field": "decision_trace",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "JSON",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "json",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        }
+      ],
+      "indexes": [
+        "Index('idx_rec_decision_store', Column('decision_date', Date(), table=<purchase_recommendation>, nullable=False), Column('store_id', String(length=12), ForeignKey('store.store_id'), table=<purchase_recommendation>, nullable=False))"
+      ],
+      "table": "purchase_recommendation"
+    },
+    "ReorderPolicy": {
+      "constraints": [
+        "CheckConstraint(<sqlalchemy.sql.elements.TextClause object at 0x7f1950eea6d0>, name='ck_reorder_policy_policy_service', table=Table('reorder_policy', MetaData(), Column('policy_id', String(length=16), table=<reorder_policy>, primary_key=True, nullable=False), Column('sku_id', String(length=10), ForeignKey('supplier_sku.sku_id'), ForeignKey('sku.sku_id'), table=<reorder_policy>, nullable=False), Column('store_id', String(length=12), ForeignKey('store.store_id'), table=<reorder_policy>, nullable=False), Column('supplier_sku_id', String(length=12), ForeignKey('supplier_sku.supplier_sku_id'), table=<reorder_policy>, nullable=False), Column('effective_from', Date(), table=<reorder_policy>, nullable=False), Column('effective_to', Date(), table=<reorder_policy>), Column('review_period_days', Integer(), table=<reorder_policy>, nullable=False), Column('service_level', Numeric(precision=5, scale=4), table=<reorder_policy>, nullable=False), Column('safety_stock_units', Integer(), table=<reorder_policy>, nullable=False), Column('capacity_limit_units', Integer(), table=<reorder_policy>, nullable=False), Column('status', String(length=16), table=<reorder_policy>, nullable=False), schema=None))",
+        "ForeignKeyConstraint(<sqlalchemy.sql.base.ReadOnlyColumnCollection object at 0x7f1950f9f830>, None, name='fk_reorder_policy_sku_id_sku', table=Table('reorder_policy', MetaData(), Column('policy_id', String(length=16), table=<reorder_policy>, primary_key=True, nullable=False), Column('sku_id', String(length=10), ForeignKey('supplier_sku.sku_id'), ForeignKey('sku.sku_id'), table=<reorder_policy>, nullable=False), Column('store_id', String(length=12), ForeignKey('store.store_id'), table=<reorder_policy>, nullable=False), Column('supplier_sku_id', String(length=12), ForeignKey('supplier_sku.supplier_sku_id'), table=<reorder_policy>, nullable=False), Column('effective_from', Date(), table=<reorder_policy>, nullable=False), Column('effective_to', Date(), table=<reorder_policy>), Column('review_period_days', Integer(), table=<reorder_policy>, nullable=False), Column('service_level', Numeric(precision=5, scale=4), table=<reorder_policy>, nullable=False), Column('safety_stock_units', Integer(), table=<reorder_policy>, nullable=False), Column('capacity_limit_units', Integer(), table=<reorder_policy>, nullable=False), Column('status', String(length=16), table=<reorder_policy>, nullable=False), schema=None))",
+        "ForeignKeyConstraint(<sqlalchemy.sql.base.ReadOnlyColumnCollection object at 0x7f1950f9f880>, None, name='fk_reorder_policy_supplier_sku_id_supplier_sku', table=Table('reorder_policy', MetaData(), Column('policy_id', String(length=16), table=<reorder_policy>, primary_key=True, nullable=False), Column('sku_id', String(length=10), ForeignKey('supplier_sku.sku_id'), ForeignKey('sku.sku_id'), table=<reorder_policy>, nullable=False), Column('store_id', String(length=12), ForeignKey('store.store_id'), table=<reorder_policy>, nullable=False), Column('supplier_sku_id', String(length=12), ForeignKey('supplier_sku.supplier_sku_id'), table=<reorder_policy>, nullable=False), Column('effective_from', Date(), table=<reorder_policy>, nullable=False), Column('effective_to', Date(), table=<reorder_policy>), Column('review_period_days', Integer(), table=<reorder_policy>, nullable=False), Column('service_level', Numeric(precision=5, scale=4), table=<reorder_policy>, nullable=False), Column('safety_stock_units', Integer(), table=<reorder_policy>, nullable=False), Column('capacity_limit_units', Integer(), table=<reorder_policy>, nullable=False), Column('status', String(length=16), table=<reorder_policy>, nullable=False), schema=None))",
+        "CheckConstraint(<sqlalchemy.sql.elements.TextClause object at 0x7f1950eea120>, name='ck_reorder_policy_policy_dates', table=Table('reorder_policy', MetaData(), Column('policy_id', String(length=16), table=<reorder_policy>, primary_key=True, nullable=False), Column('sku_id', String(length=10), ForeignKey('supplier_sku.sku_id'), ForeignKey('sku.sku_id'), table=<reorder_policy>, nullable=False), Column('store_id', String(length=12), ForeignKey('store.store_id'), table=<reorder_policy>, nullable=False), Column('supplier_sku_id', String(length=12), ForeignKey('supplier_sku.supplier_sku_id'), table=<reorder_policy>, nullable=False), Column('effective_from', Date(), table=<reorder_policy>, nullable=False), Column('effective_to', Date(), table=<reorder_policy>), Column('review_period_days', Integer(), table=<reorder_policy>, nullable=False), Column('service_level', Numeric(precision=5, scale=4), table=<reorder_policy>, nullable=False), Column('safety_stock_units', Integer(), table=<reorder_policy>, nullable=False), Column('capacity_limit_units', Integer(), table=<reorder_policy>, nullable=False), Column('status', String(length=16), table=<reorder_policy>, nullable=False), schema=None))",
+        "CheckConstraint(<sqlalchemy.sql.elements.TextClause object at 0x7f1950eea7b0>, name='ck_reorder_policy_policy_status', table=Table('reorder_policy', MetaData(), Column('policy_id', String(length=16), table=<reorder_policy>, primary_key=True, nullable=False), Column('sku_id', String(length=10), ForeignKey('supplier_sku.sku_id'), ForeignKey('sku.sku_id'), table=<reorder_policy>, nullable=False), Column('store_id', String(length=12), ForeignKey('store.store_id'), table=<reorder_policy>, nullable=False), Column('supplier_sku_id', String(length=12), ForeignKey('supplier_sku.supplier_sku_id'), table=<reorder_policy>, nullable=False), Column('effective_from', Date(), table=<reorder_policy>, nullable=False), Column('effective_to', Date(), table=<reorder_policy>), Column('review_period_days', Integer(), table=<reorder_policy>, nullable=False), Column('service_level', Numeric(precision=5, scale=4), table=<reorder_policy>, nullable=False), Column('safety_stock_units', Integer(), table=<reorder_policy>, nullable=False), Column('capacity_limit_units', Integer(), table=<reorder_policy>, nullable=False), Column('status', String(length=16), table=<reorder_policy>, nullable=False), schema=None))",
+        "ForeignKeyConstraint(<sqlalchemy.sql.base.ReadOnlyColumnCollection object at 0x7f1950f9f7e0>, None, name='fk_reorder_policy_store_id_store', table=Table('reorder_policy', MetaData(), Column('policy_id', String(length=16), table=<reorder_policy>, primary_key=True, nullable=False), Column('sku_id', String(length=10), ForeignKey('supplier_sku.sku_id'), ForeignKey('sku.sku_id'), table=<reorder_policy>, nullable=False), Column('store_id', String(length=12), ForeignKey('store.store_id'), table=<reorder_policy>, nullable=False), Column('supplier_sku_id', String(length=12), ForeignKey('supplier_sku.supplier_sku_id'), table=<reorder_policy>, nullable=False), Column('effective_from', Date(), table=<reorder_policy>, nullable=False), Column('effective_to', Date(), table=<reorder_policy>), Column('review_period_days', Integer(), table=<reorder_policy>, nullable=False), Column('service_level', Numeric(precision=5, scale=4), table=<reorder_policy>, nullable=False), Column('safety_stock_units', Integer(), table=<reorder_policy>, nullable=False), Column('capacity_limit_units', Integer(), table=<reorder_policy>, nullable=False), Column('status', String(length=16), table=<reorder_policy>, nullable=False), schema=None))",
+        "PrimaryKeyConstraint(Column('policy_id', String(length=16), table=<reorder_policy>, primary_key=True, nullable=False))",
+        "CheckConstraint(<sqlalchemy.sql.elements.TextClause object at 0x7f1950ee9fd0>, name='ck_reorder_policy_policy_quantities', table=Table('reorder_policy', MetaData(), Column('policy_id', String(length=16), table=<reorder_policy>, primary_key=True, nullable=False), Column('sku_id', String(length=10), ForeignKey('supplier_sku.sku_id'), ForeignKey('sku.sku_id'), table=<reorder_policy>, nullable=False), Column('store_id', String(length=12), ForeignKey('store.store_id'), table=<reorder_policy>, nullable=False), Column('supplier_sku_id', String(length=12), ForeignKey('supplier_sku.supplier_sku_id'), table=<reorder_policy>, nullable=False), Column('effective_from', Date(), table=<reorder_policy>, nullable=False), Column('effective_to', Date(), table=<reorder_policy>), Column('review_period_days', Integer(), table=<reorder_policy>, nullable=False), Column('service_level', Numeric(precision=5, scale=4), table=<reorder_policy>, nullable=False), Column('safety_stock_units', Integer(), table=<reorder_policy>, nullable=False), Column('capacity_limit_units', Integer(), table=<reorder_policy>, nullable=False), Column('status', String(length=16), table=<reorder_policy>, nullable=False), schema=None))",
+        "UniqueConstraint(Column('sku_id', String(length=10), ForeignKey('supplier_sku.sku_id'), ForeignKey('sku.sku_id'), table=<reorder_policy>, nullable=False), Column('store_id', String(length=12), ForeignKey('store.store_id'), table=<reorder_policy>, nullable=False), Column('effective_from', Date(), table=<reorder_policy>, nullable=False))"
+      ],
+      "fields": [
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Policy id",
+          "example": null,
+          "field": "policy_id",
+          "foreign_keys": [],
+          "primary_key": true,
+          "required": true,
+          "type": "VARCHAR(16)",
+          "unique": true,
+          "unique_scopes": [],
+          "units": "id",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Product identity",
+          "example": null,
+          "field": "sku_id",
+          "foreign_keys": [
+            "supplier_sku.sku_id",
+            "sku.sku_id"
+          ],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(10)",
+          "unique": false,
+          "unique_scopes": [
+            "sku_id,store_id,effective_from"
+          ],
+          "units": "id",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Store identity",
+          "example": null,
+          "field": "store_id",
+          "foreign_keys": [
+            "store.store_id"
+          ],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(12)",
+          "unique": false,
+          "unique_scopes": [
+            "sku_id,store_id,effective_from"
+          ],
+          "units": "id",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Supplier-to-product contract identity",
+          "example": null,
+          "field": "supplier_sku_id",
+          "foreign_keys": [
+            "supplier_sku.supplier_sku_id"
+          ],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(12)",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "id",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Effective from",
+          "example": null,
+          "field": "effective_from",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "DATE",
+          "unique": false,
+          "unique_scopes": [
+            "sku_id,store_id,effective_from"
+          ],
+          "units": "date",
+          "validation_rules": [
+            "effective_to IS NULL OR effective_to > effective_from"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Effective to",
+          "example": null,
+          "field": "effective_to",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": false,
+          "type": "DATE",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "date",
+          "validation_rules": [
+            "effective_to IS NULL OR effective_to > effective_from"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Review period days",
+          "example": null,
+          "field": "review_period_days",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "INTEGER",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "days",
+          "validation_rules": [
+            "review_period_days > 0 AND safety_stock_units >= 0 AND capacity_limit_units >= 0"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Service level",
+          "example": null,
+          "field": "service_level",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "NUMERIC(5, 4)",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "ratio",
+          "validation_rules": [
+            "service_level > 0 AND service_level < 1"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Safety stock units",
+          "example": null,
+          "field": "safety_stock_units",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "INTEGER",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "quantity",
+          "validation_rules": [
+            "review_period_days > 0 AND safety_stock_units >= 0 AND capacity_limit_units >= 0"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Capacity limit units",
+          "example": null,
+          "field": "capacity_limit_units",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "INTEGER",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "quantity",
+          "validation_rules": [
+            "review_period_days > 0 AND safety_stock_units >= 0 AND capacity_limit_units >= 0"
+          ]
+        },
+        {
+          "allowed_values": [
+            "DRAFT",
+            "ACTIVE",
+            "SUPERSEDED",
+            "DISABLED"
+          ],
+          "default": null,
+          "description": "Lifecycle state",
+          "example": null,
+          "field": "status",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(16)",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "text",
+          "validation_rules": [
+            "status IN ('DRAFT','ACTIVE','SUPERSEDED','DISABLED')"
+          ]
+        }
+      ],
+      "indexes": [],
+      "table": "reorder_policy"
+    },
+    "SKU": {
+      "constraints": [
+        "CheckConstraint(<sqlalchemy.sql.elements.TextClause object at 0x7f1951075250>, name='ck_sku_sku_dates', table=Table('sku', MetaData(), Column('sku_id', String(length=10), table=<sku>, primary_key=True, nullable=False), Column('category', String(length=50), table=<sku>, nullable=False), Column('unit', String(length=12), table=<sku>, nullable=False, default=ScalarElementColumnDefault('each')), Column('launch_date', Date(), table=<sku>, nullable=False), Column('discontinue_date', Date(), table=<sku>), Column('status', String(length=20), table=<sku>, nullable=False), Column('base_demand_rate', Float(), table=<sku>, nullable=False), Column('storage_units_per_item', Integer(), table=<sku>, nullable=False, default=ScalarElementColumnDefault(1)), schema=None))",
+        "PrimaryKeyConstraint(Column('sku_id', String(length=10), table=<sku>, primary_key=True, nullable=False))",
+        "CheckConstraint(<sqlalchemy.sql.elements.TextClause object at 0x7f19510b0190>, name='ck_sku_sku_status', table=Table('sku', MetaData(), Column('sku_id', String(length=10), table=<sku>, primary_key=True, nullable=False), Column('category', String(length=50), table=<sku>, nullable=False), Column('unit', String(length=12), table=<sku>, nullable=False, default=ScalarElementColumnDefault('each')), Column('launch_date', Date(), table=<sku>, nullable=False), Column('discontinue_date', Date(), table=<sku>), Column('status', String(length=20), table=<sku>, nullable=False), Column('base_demand_rate', Float(), table=<sku>, nullable=False), Column('storage_units_per_item', Integer(), table=<sku>, nullable=False, default=ScalarElementColumnDefault(1)), schema=None))",
+        "CheckConstraint(<sqlalchemy.sql.elements.TextClause object at 0x7f19511c2d70>, name='ck_sku_sku_unit', table=Table('sku', MetaData(), Column('sku_id', String(length=10), table=<sku>, primary_key=True, nullable=False), Column('category', String(length=50), table=<sku>, nullable=False), Column('unit', String(length=12), table=<sku>, nullable=False, default=ScalarElementColumnDefault('each')), Column('launch_date', Date(), table=<sku>, nullable=False), Column('discontinue_date', Date(), table=<sku>), Column('status', String(length=20), table=<sku>, nullable=False), Column('base_demand_rate', Float(), table=<sku>, nullable=False), Column('storage_units_per_item', Integer(), table=<sku>, nullable=False, default=ScalarElementColumnDefault(1)), schema=None))",
+        "CheckConstraint(<sqlalchemy.sql.elements.TextClause object at 0x7f19510b8160>, name='ck_sku_sku_storage', table=Table('sku', MetaData(), Column('sku_id', String(length=10), table=<sku>, primary_key=True, nullable=False), Column('category', String(length=50), table=<sku>, nullable=False), Column('unit', String(length=12), table=<sku>, nullable=False, default=ScalarElementColumnDefault('each')), Column('launch_date', Date(), table=<sku>, nullable=False), Column('discontinue_date', Date(), table=<sku>), Column('status', String(length=20), table=<sku>, nullable=False), Column('base_demand_rate', Float(), table=<sku>, nullable=False), Column('storage_units_per_item', Integer(), table=<sku>, nullable=False, default=ScalarElementColumnDefault(1)), schema=None))",
+        "CheckConstraint(<sqlalchemy.sql.elements.TextClause object at 0x7f1951026c30>, name='ck_sku_sku_demand', table=Table('sku', MetaData(), Column('sku_id', String(length=10), table=<sku>, primary_key=True, nullable=False), Column('category', String(length=50), table=<sku>, nullable=False), Column('unit', String(length=12), table=<sku>, nullable=False, default=ScalarElementColumnDefault('each')), Column('launch_date', Date(), table=<sku>, nullable=False), Column('discontinue_date', Date(), table=<sku>), Column('status', String(length=20), table=<sku>, nullable=False), Column('base_demand_rate', Float(), table=<sku>, nullable=False), Column('storage_units_per_item', Integer(), table=<sku>, nullable=False, default=ScalarElementColumnDefault(1)), schema=None))"
+      ],
+      "fields": [
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Product identity",
+          "example": "SKU-000001",
+          "field": "sku_id",
+          "foreign_keys": [],
+          "primary_key": true,
+          "required": true,
+          "type": "VARCHAR(10)",
+          "unique": true,
+          "unique_scopes": [],
+          "units": "id",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Category",
+          "example": null,
+          "field": "category",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(50)",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "text",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": [
+            "each",
+            "case",
+            "kg",
+            "litre"
+          ],
+          "default": "each",
+          "description": "Unit",
+          "example": null,
+          "field": "unit",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(12)",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "text",
+          "validation_rules": [
+            "unit IN ('each','case','kg','litre')",
+            "storage_units_per_item > 0"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Launch date",
+          "example": null,
+          "field": "launch_date",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "DATE",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "date",
+          "validation_rules": [
+            "discontinue_date IS NULL OR discontinue_date >= launch_date"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Discontinue date",
+          "example": null,
+          "field": "discontinue_date",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": false,
+          "type": "DATE",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "date",
+          "validation_rules": [
+            "discontinue_date IS NULL OR discontinue_date >= launch_date"
+          ]
+        },
+        {
+          "allowed_values": [
+            "PLANNED",
+            "ACTIVE",
+            "DISCONTINUED"
+          ],
+          "default": null,
+          "description": "Lifecycle state",
+          "example": null,
+          "field": "status",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(20)",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "text",
+          "validation_rules": [
+            "status IN ('PLANNED','ACTIVE','DISCONTINUED')"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Base demand rate",
+          "example": null,
+          "field": "base_demand_rate",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "FLOAT",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "units/day",
+          "validation_rules": [
+            "base_demand_rate >= 0"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": "1",
+          "description": "Storage units per item",
+          "example": null,
+          "field": "storage_units_per_item",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "INTEGER",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "storage units/item",
+          "validation_rules": [
+            "storage_units_per_item > 0"
+          ]
+        }
+      ],
+      "indexes": [],
+      "table": "sku"
+    },
+    "SalesHistory": {
+      "constraints": [
+        "ForeignKeyConstraint(<sqlalchemy.sql.base.ReadOnlyColumnCollection object at 0x7f1950f72e80>, None, name='fk_sales_history_sku_id_sku', table=Table('sales_history', MetaData(), Column('sale_id', String(length=64), table=<sales_history>, primary_key=True, nullable=False), Column('sku_id', String(length=10), ForeignKey('sku.sku_id'), table=<sales_history>, nullable=False), Column('store_id', String(length=12), ForeignKey('store.store_id'), table=<sales_history>, nullable=False), Column('sales_date', Date(), table=<sales_history>, nullable=False), Column('units_sold', Integer(), table=<sales_history>, nullable=False), Column('selling_price', Numeric(precision=14, scale=2), table=<sales_history>, nullable=False), Column('promotion_flag', Boolean(), table=<sales_history>, nullable=False, default=ScalarElementColumnDefault(False)), Column('promotion_multiplier', Float(), table=<sales_history>, nullable=False, default=ScalarElementColumnDefault(1.0)), Column('stockout_flag', Boolean(), table=<sales_history>, nullable=False, default=ScalarElementColumnDefault(False)), Column('observed_available_units', Integer(), table=<sales_history>, nullable=False), schema=None))",
+        "CheckConstraint(<sqlalchemy.sql.elements.TextClause object at 0x7f1950ee87c0>, name='ck_sales_history_sales_availability', table=Table('sales_history', MetaData(), Column('sale_id', String(length=64), table=<sales_history>, primary_key=True, nullable=False), Column('sku_id', String(length=10), ForeignKey('sku.sku_id'), table=<sales_history>, nullable=False), Column('store_id', String(length=12), ForeignKey('store.store_id'), table=<sales_history>, nullable=False), Column('sales_date', Date(), table=<sales_history>, nullable=False), Column('units_sold', Integer(), table=<sales_history>, nullable=False), Column('selling_price', Numeric(precision=14, scale=2), table=<sales_history>, nullable=False), Column('promotion_flag', Boolean(), table=<sales_history>, nullable=False, default=ScalarElementColumnDefault(False)), Column('promotion_multiplier', Float(), table=<sales_history>, nullable=False, default=ScalarElementColumnDefault(1.0)), Column('stockout_flag', Boolean(), table=<sales_history>, nullable=False, default=ScalarElementColumnDefault(False)), Column('observed_available_units', Integer(), table=<sales_history>, nullable=False), schema=None))",
+        "PrimaryKeyConstraint(Column('sale_id', String(length=64), table=<sales_history>, primary_key=True, nullable=False))",
+        "UniqueConstraint(Column('sku_id', String(length=10), ForeignKey('sku.sku_id'), table=<sales_history>, nullable=False), Column('store_id', String(length=12), ForeignKey('store.store_id'), table=<sales_history>, nullable=False), Column('sales_date', Date(), table=<sales_history>, nullable=False))",
+        "CheckConstraint(<sqlalchemy.sql.elements.TextClause object at 0x7f1950ee88a0>, name='ck_sales_history_sales_nonnegative', table=Table('sales_history', MetaData(), Column('sale_id', String(length=64), table=<sales_history>, primary_key=True, nullable=False), Column('sku_id', String(length=10), ForeignKey('sku.sku_id'), table=<sales_history>, nullable=False), Column('store_id', String(length=12), ForeignKey('store.store_id'), table=<sales_history>, nullable=False), Column('sales_date', Date(), table=<sales_history>, nullable=False), Column('units_sold', Integer(), table=<sales_history>, nullable=False), Column('selling_price', Numeric(precision=14, scale=2), table=<sales_history>, nullable=False), Column('promotion_flag', Boolean(), table=<sales_history>, nullable=False, default=ScalarElementColumnDefault(False)), Column('promotion_multiplier', Float(), table=<sales_history>, nullable=False, default=ScalarElementColumnDefault(1.0)), Column('stockout_flag', Boolean(), table=<sales_history>, nullable=False, default=ScalarElementColumnDefault(False)), Column('observed_available_units', Integer(), table=<sales_history>, nullable=False), schema=None))",
+        "CheckConstraint(<sqlalchemy.sql.elements.TextClause object at 0x7f1950ee86e0>, name='ck_sales_history_sales_price_mult', table=Table('sales_history', MetaData(), Column('sale_id', String(length=64), table=<sales_history>, primary_key=True, nullable=False), Column('sku_id', String(length=10), ForeignKey('sku.sku_id'), table=<sales_history>, nullable=False), Column('store_id', String(length=12), ForeignKey('store.store_id'), table=<sales_history>, nullable=False), Column('sales_date', Date(), table=<sales_history>, nullable=False), Column('units_sold', Integer(), table=<sales_history>, nullable=False), Column('selling_price', Numeric(precision=14, scale=2), table=<sales_history>, nullable=False), Column('promotion_flag', Boolean(), table=<sales_history>, nullable=False, default=ScalarElementColumnDefault(False)), Column('promotion_multiplier', Float(), table=<sales_history>, nullable=False, default=ScalarElementColumnDefault(1.0)), Column('stockout_flag', Boolean(), table=<sales_history>, nullable=False, default=ScalarElementColumnDefault(False)), Column('observed_available_units', Integer(), table=<sales_history>, nullable=False), schema=None))",
+        "ForeignKeyConstraint(<sqlalchemy.sql.base.ReadOnlyColumnCollection object at 0x7f1950f72f20>, None, name='fk_sales_history_store_id_store', table=Table('sales_history', MetaData(), Column('sale_id', String(length=64), table=<sales_history>, primary_key=True, nullable=False), Column('sku_id', String(length=10), ForeignKey('sku.sku_id'), table=<sales_history>, nullable=False), Column('store_id', String(length=12), ForeignKey('store.store_id'), table=<sales_history>, nullable=False), Column('sales_date', Date(), table=<sales_history>, nullable=False), Column('units_sold', Integer(), table=<sales_history>, nullable=False), Column('selling_price', Numeric(precision=14, scale=2), table=<sales_history>, nullable=False), Column('promotion_flag', Boolean(), table=<sales_history>, nullable=False, default=ScalarElementColumnDefault(False)), Column('promotion_multiplier', Float(), table=<sales_history>, nullable=False, default=ScalarElementColumnDefault(1.0)), Column('stockout_flag', Boolean(), table=<sales_history>, nullable=False, default=ScalarElementColumnDefault(False)), Column('observed_available_units', Integer(), table=<sales_history>, nullable=False), schema=None))"
+      ],
+      "fields": [
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Deterministic SKU/store/day sale identity",
+          "example": "SALE-STORE-000001-SKU-000001-2026-01-01",
+          "field": "sale_id",
+          "foreign_keys": [],
+          "primary_key": true,
+          "required": true,
+          "type": "VARCHAR(64)",
+          "unique": true,
+          "unique_scopes": [],
+          "units": "id",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Product identity",
+          "example": null,
+          "field": "sku_id",
+          "foreign_keys": [
+            "sku.sku_id"
+          ],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(10)",
+          "unique": false,
+          "unique_scopes": [
+            "sku_id,store_id,sales_date"
+          ],
+          "units": "id",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Store identity",
+          "example": null,
+          "field": "store_id",
+          "foreign_keys": [
+            "store.store_id"
+          ],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(12)",
+          "unique": false,
+          "unique_scopes": [
+            "sku_id,store_id,sales_date"
+          ],
+          "units": "id",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Sales date",
+          "example": null,
+          "field": "sales_date",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "DATE",
+          "unique": false,
+          "unique_scopes": [
+            "sku_id,store_id,sales_date"
+          ],
+          "units": "date",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Units sold",
+          "example": null,
+          "field": "units_sold",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "INTEGER",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "quantity",
+          "validation_rules": [
+            "units_sold <= observed_available_units",
+            "units_sold >= 0 AND observed_available_units >= 0"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Selling price",
+          "example": null,
+          "field": "selling_price",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "NUMERIC(14, 2)",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "money",
+          "validation_rules": [
+            "selling_price >= 0 AND promotion_multiplier >= 0"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": "False",
+          "description": "Promotion flag",
+          "example": null,
+          "field": "promotion_flag",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "BOOLEAN",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "flag",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": "1.0",
+          "description": "Promotion multiplier",
+          "example": null,
+          "field": "promotion_multiplier",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "FLOAT",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "ratio",
+          "validation_rules": [
+            "selling_price >= 0 AND promotion_multiplier >= 0"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": "False",
+          "description": "Stockout flag",
+          "example": null,
+          "field": "stockout_flag",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "BOOLEAN",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "flag",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Available units at sale observation; sales may not exceed this",
+          "example": null,
+          "field": "observed_available_units",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "INTEGER",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "quantity",
+          "validation_rules": [
+            "units_sold <= observed_available_units",
+            "units_sold >= 0 AND observed_available_units >= 0"
+          ]
+        }
+      ],
+      "indexes": [
+        "Index('idx_sales_date_store', Column('sales_date', Date(), table=<sales_history>, nullable=False), Column('store_id', String(length=12), ForeignKey('store.store_id'), table=<sales_history>, nullable=False))"
+      ],
+      "table": "sales_history"
+    },
+    "Store": {
+      "constraints": [
+        "CheckConstraint(<sqlalchemy.sql.elements.TextClause object at 0x7f19510cac10>, name='ck_store_store_capacity', table=Table('store', MetaData(), Column('store_id', String(length=12), table=<store>, primary_key=True, nullable=False), Column('region', String(length=60), table=<store>, nullable=False), Column('timezone', String(length=64), table=<store>, nullable=False, default=ScalarElementColumnDefault('Asia/Kolkata')), Column('open_date', Date(), table=<store>, nullable=False), Column('close_date', Date(), table=<store>), Column('status', String(length=16), table=<store>, nullable=False), Column('capacity_units', Integer(), table=<store>, nullable=False), schema=None))",
+        "CheckConstraint(<sqlalchemy.sql.elements.TextClause object at 0x7f19511a19d0>, name='ck_store_store_dates', table=Table('store', MetaData(), Column('store_id', String(length=12), table=<store>, primary_key=True, nullable=False), Column('region', String(length=60), table=<store>, nullable=False), Column('timezone', String(length=64), table=<store>, nullable=False, default=ScalarElementColumnDefault('Asia/Kolkata')), Column('open_date', Date(), table=<store>, nullable=False), Column('close_date', Date(), table=<store>), Column('status', String(length=16), table=<store>, nullable=False), Column('capacity_units', Integer(), table=<store>, nullable=False), schema=None))",
+        "CheckConstraint(<sqlalchemy.sql.elements.TextClause object at 0x7f195102b5c0>, name='ck_store_store_status', table=Table('store', MetaData(), Column('store_id', String(length=12), table=<store>, primary_key=True, nullable=False), Column('region', String(length=60), table=<store>, nullable=False), Column('timezone', String(length=64), table=<store>, nullable=False, default=ScalarElementColumnDefault('Asia/Kolkata')), Column('open_date', Date(), table=<store>, nullable=False), Column('close_date', Date(), table=<store>), Column('status', String(length=16), table=<store>, nullable=False), Column('capacity_units', Integer(), table=<store>, nullable=False), schema=None))",
+        "PrimaryKeyConstraint(Column('store_id', String(length=12), table=<store>, primary_key=True, nullable=False))"
+      ],
+      "fields": [
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Store identity",
+          "example": "STORE-000001",
+          "field": "store_id",
+          "foreign_keys": [],
+          "primary_key": true,
+          "required": true,
+          "type": "VARCHAR(12)",
+          "unique": true,
+          "unique_scopes": [],
+          "units": "id",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Region",
+          "example": null,
+          "field": "region",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(60)",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "text",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": "Asia/Kolkata",
+          "description": "Timezone",
+          "example": null,
+          "field": "timezone",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(64)",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "timezone",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Open date",
+          "example": null,
+          "field": "open_date",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "DATE",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "date",
+          "validation_rules": [
+            "close_date IS NULL OR close_date >= open_date"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Close date",
+          "example": null,
+          "field": "close_date",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": false,
+          "type": "DATE",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "date",
+          "validation_rules": [
+            "close_date IS NULL OR close_date >= open_date"
+          ]
+        },
+        {
+          "allowed_values": [
+            "PLANNED",
+            "OPEN",
+            "CLOSED"
+          ],
+          "default": null,
+          "description": "Lifecycle state",
+          "example": null,
+          "field": "status",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(16)",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "text",
+          "validation_rules": [
+            "status IN ('PLANNED','OPEN','CLOSED')"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Capacity units",
+          "example": null,
+          "field": "capacity_units",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "INTEGER",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "quantity",
+          "validation_rules": [
+            "capacity_units >= 0"
+          ]
+        }
+      ],
+      "indexes": [],
+      "table": "store"
+    },
+    "Supplier": {
+      "constraints": [
+        "CheckConstraint(<sqlalchemy.sql.elements.TextClause object at 0x7f19510c5e50>, name='ck_supplier_supplier_reliability', table=Table('supplier', MetaData(), Column('supplier_id', String(length=10), table=<supplier>, primary_key=True, nullable=False), Column('supplier_name', String(length=120), table=<supplier>, nullable=False), Column('status', String(length=16), table=<supplier>, nullable=False), Column('effective_from', Date(), table=<supplier>, nullable=False), Column('effective_to', Date(), table=<supplier>), Column('reliability_factor', Float(), table=<supplier>, nullable=False), schema=None))",
+        "CheckConstraint(<sqlalchemy.sql.elements.TextClause object at 0x7f195118bee0>, name='ck_supplier_supplier_status', table=Table('supplier', MetaData(), Column('supplier_id', String(length=10), table=<supplier>, primary_key=True, nullable=False), Column('supplier_name', String(length=120), table=<supplier>, nullable=False), Column('status', String(length=16), table=<supplier>, nullable=False), Column('effective_from', Date(), table=<supplier>, nullable=False), Column('effective_to', Date(), table=<supplier>), Column('reliability_factor', Float(), table=<supplier>, nullable=False), schema=None))",
+        "PrimaryKeyConstraint(Column('supplier_id', String(length=10), table=<supplier>, primary_key=True, nullable=False))",
+        "CheckConstraint(<sqlalchemy.sql.elements.TextClause object at 0x7f19511c70b0>, name='ck_supplier_supplier_dates', table=Table('supplier', MetaData(), Column('supplier_id', String(length=10), table=<supplier>, primary_key=True, nullable=False), Column('supplier_name', String(length=120), table=<supplier>, nullable=False), Column('status', String(length=16), table=<supplier>, nullable=False), Column('effective_from', Date(), table=<supplier>, nullable=False), Column('effective_to', Date(), table=<supplier>), Column('reliability_factor', Float(), table=<supplier>, nullable=False), schema=None))"
+      ],
+      "fields": [
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Supplier identity",
+          "example": null,
+          "field": "supplier_id",
+          "foreign_keys": [],
+          "primary_key": true,
+          "required": true,
+          "type": "VARCHAR(10)",
+          "unique": true,
+          "unique_scopes": [],
+          "units": "id",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Supplier name",
+          "example": null,
+          "field": "supplier_name",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(120)",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "text",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": [
+            "ACTIVE",
+            "SUSPENDED",
+            "INACTIVE"
+          ],
+          "default": null,
+          "description": "Lifecycle state",
+          "example": null,
+          "field": "status",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(16)",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "text",
+          "validation_rules": [
+            "status IN ('ACTIVE','SUSPENDED','INACTIVE')"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Effective from",
+          "example": null,
+          "field": "effective_from",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "DATE",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "date",
+          "validation_rules": [
+            "effective_to IS NULL OR effective_to > effective_from"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Effective to",
+          "example": null,
+          "field": "effective_to",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": false,
+          "type": "DATE",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "date",
+          "validation_rules": [
+            "effective_to IS NULL OR effective_to > effective_from"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Reliability factor",
+          "example": null,
+          "field": "reliability_factor",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "FLOAT",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "ratio",
+          "validation_rules": [
+            "reliability_factor >= 0 AND reliability_factor <= 1"
+          ]
+        }
+      ],
+      "indexes": [],
+      "table": "supplier"
+    },
+    "SupplierSKU": {
+      "constraints": [
+        "UniqueConstraint(Column('supplier_id', String(length=10), ForeignKey('supplier.supplier_id'), table=<supplier_sku>, nullable=False), Column('sku_id', String(length=10), ForeignKey('sku.sku_id'), table=<supplier_sku>, nullable=False), Column('valid_from', Date(), table=<supplier_sku>, nullable=False))",
+        "CheckConstraint(<sqlalchemy.sql.elements.TextClause object at 0x7f1950ee8210>, name='ck_supplier_sku_contract_lead', table=Table('supplier_sku', MetaData(), Column('supplier_sku_id', String(length=12), table=<supplier_sku>, primary_key=True, nullable=False), Column('supplier_id', String(length=10), ForeignKey('supplier.supplier_id'), table=<supplier_sku>, nullable=False), Column('sku_id', String(length=10), ForeignKey('sku.sku_id'), table=<supplier_sku>, nullable=False), Column('valid_from', Date(), table=<supplier_sku>, nullable=False), Column('valid_to', Date(), table=<supplier_sku>), Column('status', String(length=16), table=<supplier_sku>, nullable=False), Column('base_lead_time_days', Integer(), table=<supplier_sku>, nullable=False), Column('moq_units', Integer(), table=<supplier_sku>, nullable=False), Column('pack_size_units', Integer(), table=<supplier_sku>, nullable=False), Column('unit_cost', Numeric(precision=14, scale=2), table=<supplier_sku>, nullable=False), Column('supplier_capacity_units', Integer(), table=<supplier_sku>, nullable=False), schema=None))",
+        "PrimaryKeyConstraint(Column('supplier_sku_id', String(length=12), table=<supplier_sku>, primary_key=True, nullable=False))",
+        "CheckConstraint(<sqlalchemy.sql.elements.TextClause object at 0x7f195108f850>, name='ck_supplier_sku_contract_dates', table=Table('supplier_sku', MetaData(), Column('supplier_sku_id', String(length=12), table=<supplier_sku>, primary_key=True, nullable=False), Column('supplier_id', String(length=10), ForeignKey('supplier.supplier_id'), table=<supplier_sku>, nullable=False), Column('sku_id', String(length=10), ForeignKey('sku.sku_id'), table=<supplier_sku>, nullable=False), Column('valid_from', Date(), table=<supplier_sku>, nullable=False), Column('valid_to', Date(), table=<supplier_sku>), Column('status', String(length=16), table=<supplier_sku>, nullable=False), Column('base_lead_time_days', Integer(), table=<supplier_sku>, nullable=False), Column('moq_units', Integer(), table=<supplier_sku>, nullable=False), Column('pack_size_units', Integer(), table=<supplier_sku>, nullable=False), Column('unit_cost', Numeric(precision=14, scale=2), table=<supplier_sku>, nullable=False), Column('supplier_capacity_units', Integer(), table=<supplier_sku>, nullable=False), schema=None))",
+        "CheckConstraint(<sqlalchemy.sql.elements.TextClause object at 0x7f1950ee83d0>, name='ck_supplier_sku_contract_cost_capacity', table=Table('supplier_sku', MetaData(), Column('supplier_sku_id', String(length=12), table=<supplier_sku>, primary_key=True, nullable=False), Column('supplier_id', String(length=10), ForeignKey('supplier.supplier_id'), table=<supplier_sku>, nullable=False), Column('sku_id', String(length=10), ForeignKey('sku.sku_id'), table=<supplier_sku>, nullable=False), Column('valid_from', Date(), table=<supplier_sku>, nullable=False), Column('valid_to', Date(), table=<supplier_sku>), Column('status', String(length=16), table=<supplier_sku>, nullable=False), Column('base_lead_time_days', Integer(), table=<supplier_sku>, nullable=False), Column('moq_units', Integer(), table=<supplier_sku>, nullable=False), Column('pack_size_units', Integer(), table=<supplier_sku>, nullable=False), Column('unit_cost', Numeric(precision=14, scale=2), table=<supplier_sku>, nullable=False), Column('supplier_capacity_units', Integer(), table=<supplier_sku>, nullable=False), schema=None))",
+        "ForeignKeyConstraint(<sqlalchemy.sql.base.ReadOnlyColumnCollection object at 0x7f1950f9e390>, None, name='fk_supplier_sku_supplier_id_supplier', table=Table('supplier_sku', MetaData(), Column('supplier_sku_id', String(length=12), table=<supplier_sku>, primary_key=True, nullable=False), Column('supplier_id', String(length=10), ForeignKey('supplier.supplier_id'), table=<supplier_sku>, nullable=False), Column('sku_id', String(length=10), ForeignKey('sku.sku_id'), table=<supplier_sku>, nullable=False), Column('valid_from', Date(), table=<supplier_sku>, nullable=False), Column('valid_to', Date(), table=<supplier_sku>), Column('status', String(length=16), table=<supplier_sku>, nullable=False), Column('base_lead_time_days', Integer(), table=<supplier_sku>, nullable=False), Column('moq_units', Integer(), table=<supplier_sku>, nullable=False), Column('pack_size_units', Integer(), table=<supplier_sku>, nullable=False), Column('unit_cost', Numeric(precision=14, scale=2), table=<supplier_sku>, nullable=False), Column('supplier_capacity_units', Integer(), table=<supplier_sku>, nullable=False), schema=None))",
+        "CheckConstraint(<sqlalchemy.sql.elements.TextClause object at 0x7f1950ee82f0>, name='ck_supplier_sku_contract_pack_moq', table=Table('supplier_sku', MetaData(), Column('supplier_sku_id', String(length=12), table=<supplier_sku>, primary_key=True, nullable=False), Column('supplier_id', String(length=10), ForeignKey('supplier.supplier_id'), table=<supplier_sku>, nullable=False), Column('sku_id', String(length=10), ForeignKey('sku.sku_id'), table=<supplier_sku>, nullable=False), Column('valid_from', Date(), table=<supplier_sku>, nullable=False), Column('valid_to', Date(), table=<supplier_sku>), Column('status', String(length=16), table=<supplier_sku>, nullable=False), Column('base_lead_time_days', Integer(), table=<supplier_sku>, nullable=False), Column('moq_units', Integer(), table=<supplier_sku>, nullable=False), Column('pack_size_units', Integer(), table=<supplier_sku>, nullable=False), Column('unit_cost', Numeric(precision=14, scale=2), table=<supplier_sku>, nullable=False), Column('supplier_capacity_units', Integer(), table=<supplier_sku>, nullable=False), schema=None))",
+        "ForeignKeyConstraint(<sqlalchemy.sql.base.ReadOnlyColumnCollection object at 0x7f1950f9e3e0>, None, name='fk_supplier_sku_sku_id_sku', table=Table('supplier_sku', MetaData(), Column('supplier_sku_id', String(length=12), table=<supplier_sku>, primary_key=True, nullable=False), Column('supplier_id', String(length=10), ForeignKey('supplier.supplier_id'), table=<supplier_sku>, nullable=False), Column('sku_id', String(length=10), ForeignKey('sku.sku_id'), table=<supplier_sku>, nullable=False), Column('valid_from', Date(), table=<supplier_sku>, nullable=False), Column('valid_to', Date(), table=<supplier_sku>), Column('status', String(length=16), table=<supplier_sku>, nullable=False), Column('base_lead_time_days', Integer(), table=<supplier_sku>, nullable=False), Column('moq_units', Integer(), table=<supplier_sku>, nullable=False), Column('pack_size_units', Integer(), table=<supplier_sku>, nullable=False), Column('unit_cost', Numeric(precision=14, scale=2), table=<supplier_sku>, nullable=False), Column('supplier_capacity_units', Integer(), table=<supplier_sku>, nullable=False), schema=None))",
+        "UniqueConstraint(Column('supplier_sku_id', String(length=12), table=<supplier_sku>, primary_key=True, nullable=False), Column('sku_id', String(length=10), ForeignKey('sku.sku_id'), table=<supplier_sku>, nullable=False))",
+        "CheckConstraint(<sqlalchemy.sql.elements.TextClause object at 0x7f19510b7250>, name='ck_supplier_sku_contract_status', table=Table('supplier_sku', MetaData(), Column('supplier_sku_id', String(length=12), table=<supplier_sku>, primary_key=True, nullable=False), Column('supplier_id', String(length=10), ForeignKey('supplier.supplier_id'), table=<supplier_sku>, nullable=False), Column('sku_id', String(length=10), ForeignKey('sku.sku_id'), table=<supplier_sku>, nullable=False), Column('valid_from', Date(), table=<supplier_sku>, nullable=False), Column('valid_to', Date(), table=<supplier_sku>), Column('status', String(length=16), table=<supplier_sku>, nullable=False), Column('base_lead_time_days', Integer(), table=<supplier_sku>, nullable=False), Column('moq_units', Integer(), table=<supplier_sku>, nullable=False), Column('pack_size_units', Integer(), table=<supplier_sku>, nullable=False), Column('unit_cost', Numeric(precision=14, scale=2), table=<supplier_sku>, nullable=False), Column('supplier_capacity_units', Integer(), table=<supplier_sku>, nullable=False), schema=None))"
+      ],
+      "fields": [
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Supplier-to-product contract identity",
+          "example": null,
+          "field": "supplier_sku_id",
+          "foreign_keys": [],
+          "primary_key": true,
+          "required": true,
+          "type": "VARCHAR(12)",
+          "unique": true,
+          "unique_scopes": [
+            "supplier_sku_id,sku_id"
+          ],
+          "units": "id",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Supplier identity",
+          "example": null,
+          "field": "supplier_id",
+          "foreign_keys": [
+            "supplier.supplier_id"
+          ],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(10)",
+          "unique": false,
+          "unique_scopes": [
+            "supplier_id,sku_id,valid_from"
+          ],
+          "units": "id",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Product identity",
+          "example": null,
+          "field": "sku_id",
+          "foreign_keys": [
+            "sku.sku_id"
+          ],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(10)",
+          "unique": false,
+          "unique_scopes": [
+            "supplier_id,sku_id,valid_from",
+            "supplier_sku_id,sku_id"
+          ],
+          "units": "id",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Valid from",
+          "example": null,
+          "field": "valid_from",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "DATE",
+          "unique": false,
+          "unique_scopes": [
+            "supplier_id,sku_id,valid_from"
+          ],
+          "units": "date",
+          "validation_rules": [
+            "valid_to IS NULL OR valid_to > valid_from"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Valid to",
+          "example": null,
+          "field": "valid_to",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": false,
+          "type": "DATE",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "date",
+          "validation_rules": [
+            "valid_to IS NULL OR valid_to > valid_from"
+          ]
+        },
+        {
+          "allowed_values": [
+            "PENDING",
+            "ACTIVE",
+            "EXPIRED",
+            "TERMINATED"
+          ],
+          "default": null,
+          "description": "Lifecycle state",
+          "example": null,
+          "field": "status",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(16)",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "text",
+          "validation_rules": [
+            "status IN ('PENDING','ACTIVE','EXPIRED','TERMINATED')"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Base lead time days",
+          "example": null,
+          "field": "base_lead_time_days",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "INTEGER",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "days",
+          "validation_rules": [
+            "base_lead_time_days > 0"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Moq units",
+          "example": null,
+          "field": "moq_units",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "INTEGER",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "quantity",
+          "validation_rules": [
+            "moq_units > 0 AND pack_size_units > 0"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Pack size units",
+          "example": null,
+          "field": "pack_size_units",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "INTEGER",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "quantity",
+          "validation_rules": [
+            "moq_units > 0 AND pack_size_units > 0"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Unit cost",
+          "example": null,
+          "field": "unit_cost",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "NUMERIC(14, 2)",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "money",
+          "validation_rules": [
+            "unit_cost >= 0 AND supplier_capacity_units >= 0"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Supplier capacity units",
+          "example": null,
+          "field": "supplier_capacity_units",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "INTEGER",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "quantity",
+          "validation_rules": [
+            "unit_cost >= 0 AND supplier_capacity_units >= 0"
+          ]
+        }
+      ],
+      "indexes": [],
+      "table": "supplier_sku"
+    }
+  },
+  "core_entity_count": 10,
+  "currency": "INR (design assumption)",
+  "date_intervals": "[start,end) unless otherwise stated",
+  "schema_version": "2.0-phase1",
+  "status": "design and generated contract, not executed acceptance",
+  "supporting_technical_artifacts": {
+    "InventoryMovementEvent": {
+      "constraints": [
+        "CheckConstraint(<sqlalchemy.sql.elements.TextClause object at 0x7f1950eeab30>, name='ck_tech_inventory_movement_event_inv_event_type', table=Table('tech_inventory_movement_event', MetaData(), Column('event_id', String(length=100), table=<tech_inventory_movement_event>, primary_key=True, nullable=False), Column('inventory_id', String(length=64), ForeignKey('inventory_snapshot.inventory_id'), table=<tech_inventory_movement_event>, nullable=False), Column('occurred_at', DateTime(timezone=True), table=<tech_inventory_movement_event>, nullable=False), Column('movement_type', String(length=24), table=<tech_inventory_movement_event>, nullable=False), Column('quantity_delta', Integer(), table=<tech_inventory_movement_event>, nullable=False), Column('correlation_id', String(length=100), table=<tech_inventory_movement_event>, nullable=False), Column('payload', JSON(), table=<tech_inventory_movement_event>, nullable=False), schema=None))",
+        "ForeignKeyConstraint(<sqlalchemy.sql.base.ReadOnlyColumnCollection object at 0x7f1950f9d9e0>, None, name='fk_tech_inventory_movement_event_inventory_id_inventory_snapshot', table=Table('tech_inventory_movement_event', MetaData(), Column('event_id', String(length=100), table=<tech_inventory_movement_event>, primary_key=True, nullable=False), Column('inventory_id', String(length=64), ForeignKey('inventory_snapshot.inventory_id'), table=<tech_inventory_movement_event>, nullable=False), Column('occurred_at', DateTime(timezone=True), table=<tech_inventory_movement_event>, nullable=False), Column('movement_type', String(length=24), table=<tech_inventory_movement_event>, nullable=False), Column('quantity_delta', Integer(), table=<tech_inventory_movement_event>, nullable=False), Column('correlation_id', String(length=100), table=<tech_inventory_movement_event>, nullable=False), Column('payload', JSON(), table=<tech_inventory_movement_event>, nullable=False), schema=None))",
+        "PrimaryKeyConstraint(Column('event_id', String(length=100), table=<tech_inventory_movement_event>, primary_key=True, nullable=False))"
+      ],
+      "fields": [
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Event id",
+          "example": null,
+          "field": "event_id",
+          "foreign_keys": [],
+          "primary_key": true,
+          "required": true,
+          "type": "VARCHAR(100)",
+          "unique": true,
+          "unique_scopes": [],
+          "units": "id",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Deterministic SKU/store/day snapshot identity",
+          "example": null,
+          "field": "inventory_id",
+          "foreign_keys": [
+            "inventory_snapshot.inventory_id"
+          ],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(64)",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "id",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Occurred at",
+          "example": null,
+          "field": "occurred_at",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "DATETIME",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "timestamp",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": [
+            "OPENING",
+            "RECEIPT",
+            "SALE",
+            "ADJUSTMENT",
+            "RESERVATION",
+            "RELEASE"
+          ],
+          "default": null,
+          "description": "Movement type",
+          "example": null,
+          "field": "movement_type",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(24)",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "text",
+          "validation_rules": [
+            "movement_type IN ('OPENING','RECEIPT','SALE','ADJUSTMENT','RESERVATION','RELEASE')"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Quantity delta",
+          "example": null,
+          "field": "quantity_delta",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "INTEGER",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "quantity",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Correlation id",
+          "example": null,
+          "field": "correlation_id",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(100)",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "id",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Immutable event payload with source/version metadata",
+          "example": null,
+          "field": "payload",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "JSON",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "json",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        }
+      ],
+      "indexes": [],
+      "table": "tech_inventory_movement_event"
+    },
+    "RecommendationLifecycleEvent": {
+      "constraints": [
+        "PrimaryKeyConstraint(Column('event_id', String(length=100), table=<tech_recommendation_lifecycle_event>, primary_key=True, nullable=False))",
+        "ForeignKeyConstraint(<sqlalchemy.sql.base.ReadOnlyColumnCollection object at 0x7f1950f9d3a0>, None, name='fk_tech_recommendation_lifecycle_event_recommendation_id_purchase_recommendation', table=Table('tech_recommendation_lifecycle_event', MetaData(), Column('event_id', String(length=100), table=<tech_recommendation_lifecycle_event>, primary_key=True, nullable=False), Column('recommendation_id', String(length=24), ForeignKey('purchase_recommendation.recommendation_id'), table=<tech_recommendation_lifecycle_event>, nullable=False), Column('occurred_at', DateTime(timezone=True), table=<tech_recommendation_lifecycle_event>, nullable=False), Column('previous_status', String(length=16), table=<tech_recommendation_lifecycle_event>), Column('new_status', String(length=16), table=<tech_recommendation_lifecycle_event>, nullable=False), Column('actor', String(length=100), table=<tech_recommendation_lifecycle_event>, nullable=False), Column('correlation_id', String(length=100), table=<tech_recommendation_lifecycle_event>, nullable=False), Column('payload', JSON(), table=<tech_recommendation_lifecycle_event>, nullable=False), schema=None))"
+      ],
+      "fields": [
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Event id",
+          "example": null,
+          "field": "event_id",
+          "foreign_keys": [],
+          "primary_key": true,
+          "required": true,
+          "type": "VARCHAR(100)",
+          "unique": true,
+          "unique_scopes": [],
+          "units": "id",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Deterministic year/ordinal decision identity",
+          "example": null,
+          "field": "recommendation_id",
+          "foreign_keys": [
+            "purchase_recommendation.recommendation_id"
+          ],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(24)",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "id",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Occurred at",
+          "example": null,
+          "field": "occurred_at",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "DATETIME",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "timestamp",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Previous status",
+          "example": null,
+          "field": "previous_status",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": false,
+          "type": "VARCHAR(16)",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "text",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "New status",
+          "example": null,
+          "field": "new_status",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(16)",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "text",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Actor",
+          "example": null,
+          "field": "actor",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(100)",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "text",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Correlation id",
+          "example": null,
+          "field": "correlation_id",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(100)",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "id",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Immutable event payload with source/version metadata",
+          "example": null,
+          "field": "payload",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "JSON",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "json",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        }
+      ],
+      "indexes": [],
+      "table": "tech_recommendation_lifecycle_event"
+    },
+    "SupplierObservationEvent": {
+      "constraints": [
+        "ForeignKeyConstraint(<sqlalchemy.sql.base.ReadOnlyColumnCollection object at 0x7f1950f9d760>, None, name='fk_tech_supplier_observation_event_observation_id_lead_time_observation', table=Table('tech_supplier_observation_event', MetaData(), Column('event_id', String(length=100), table=<tech_supplier_observation_event>, primary_key=True, nullable=False), Column('observation_id', String(length=16), ForeignKey('lead_time_observation.observation_id'), table=<tech_supplier_observation_event>, nullable=False), Column('occurred_at', DateTime(timezone=True), table=<tech_supplier_observation_event>, nullable=False), Column('previous_status', String(length=16), table=<tech_supplier_observation_event>), Column('new_status', String(length=16), table=<tech_supplier_observation_event>, nullable=False), Column('correlation_id', String(length=100), table=<tech_supplier_observation_event>, nullable=False), Column('payload', JSON(), table=<tech_supplier_observation_event>, nullable=False), schema=None))",
+        "PrimaryKeyConstraint(Column('event_id', String(length=100), table=<tech_supplier_observation_event>, primary_key=True, nullable=False))"
+      ],
+      "fields": [
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Event id",
+          "example": null,
+          "field": "event_id",
+          "foreign_keys": [],
+          "primary_key": true,
+          "required": true,
+          "type": "VARCHAR(100)",
+          "unique": true,
+          "unique_scopes": [],
+          "units": "id",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Observation id",
+          "example": null,
+          "field": "observation_id",
+          "foreign_keys": [
+            "lead_time_observation.observation_id"
+          ],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(16)",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "id",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Occurred at",
+          "example": null,
+          "field": "occurred_at",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "DATETIME",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "timestamp",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Previous status",
+          "example": null,
+          "field": "previous_status",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": false,
+          "type": "VARCHAR(16)",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "text",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "New status",
+          "example": null,
+          "field": "new_status",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(16)",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "text",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Correlation id",
+          "example": null,
+          "field": "correlation_id",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "VARCHAR(100)",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "id",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        },
+        {
+          "allowed_values": "per type and validation rules",
+          "default": null,
+          "description": "Immutable event payload with source/version metadata",
+          "example": null,
+          "field": "payload",
+          "foreign_keys": [],
+          "primary_key": false,
+          "required": true,
+          "type": "JSON",
+          "unique": false,
+          "unique_scopes": [],
+          "units": "json",
+          "validation_rules": [
+            "Type/nullable/FK constraints; see entity constraints"
+          ]
+        }
+      ],
+      "indexes": [],
+      "table": "tech_supplier_observation_event"
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "backend_failed": 0,
+  "backend_passed": 200,
+  "backend_skipped": 1,
+  "batch_results": {
+    "A": {
+      "log": "backend_tests_batch_A.txt",
+      "passed": 102,
+      "skipped": 0
+    },
+    "B1": {
+      "log": "backend_tests_batch_B1.txt",
+      "passed": 42,
+      "skipped": 0
+    },
+    "B2": {
+      "log": "backend_tests_batch_B2.txt",
+      "passed": 32,
+      "skipped": 0
+    },
+    "C": {
+      "log": "backend_tests_batch_C.txt",
+      "passed": 24,
+      "skipped": 1
+    }
+  },
+  "frontend_modified_source": "TSC_PASS_WITH_VERSION_MATCHED_DEPENDENCIES; VITEST_BUILD_E2E_BLOCKED_PLATFORM_NATIVE_DEPENDENCIES",
+  "full_scale_73million_potential": "NOT_RUN",
+  "postgresql_modified_source": "NOT_VERIFIED_LOCAL_PG_NOT_AVAILABLE",
+  "scope": "all 16 backend/tests/test_*.py files, each in exactly one batch",
+  "single_process_full_test_run": "BLOCKED_TIMEOUT_NOT_PASS",
+  "status": "PASS_IN_DISJOINT_BATCHES"
+}

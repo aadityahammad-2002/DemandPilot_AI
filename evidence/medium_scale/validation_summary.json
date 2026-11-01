@@ -1,0 +1,38 @@
+{
+  "entities": {
+    "forecast": 0,
+    "ground_truth_labels": 86490,
+    "inventory_snapshot": 87130,
+    "lead_time_observation": 400,
+    "purchase_recommendation": 0,
+    "reorder_policy": 1000,
+    "sales_history": 86490,
+    "sku": 100,
+    "store": 10,
+    "supplier": 80,
+    "supplier_sku": 100
+  },
+  "error_count": 0,
+  "errors": [],
+  "file_count": 72,
+  "negative_scenarios": [
+    "NEG-01",
+    "NEG-02",
+    "NEG-03",
+    "NEG-04",
+    "NEG-05"
+  ],
+  "note": "validated independent full-stream scan, not PostgreSQL import or forecast/replenishment behavior",
+  "reconciled": {
+    "actual_zero_demand_days": 15025,
+    "eligible_sku_store_days": 86490,
+    "latent_demand_units": 595016,
+    "lost_demand_units": 61438,
+    "observed_sales_units": 533578,
+    "promotion_days": 9970,
+    "received_units": 587591,
+    "retired_inventory_snapshot_days": 640,
+    "stockout_censored_days": 6890
+  },
+  "status": "PASS"
+}

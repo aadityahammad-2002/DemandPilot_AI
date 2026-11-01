@@ -1,0 +1,2 @@
+recommendation_id,policy_id,sku_id,store_id,supplier_sku_id,decision_date,forecast_run_id,inventory_date,inventory_position,lead_time_demand,raw_quantity,recommended_quantity,status,reason_codes,rule_version,decision_trace
+PO-2026-999998,POL-000002,SKU-000002,STORE-000001,SSKU-000002,2026-01-30,FC-RUN-NEGATIVE-OVERLAY,2026-01-30,0,30,23,23,GENERATED,"[""NEGATIVE_OVERLAY""]",ADVERSARIAL-OVERLAY,"{""moq_units"": 24, ""pack_size_units"": 12}"

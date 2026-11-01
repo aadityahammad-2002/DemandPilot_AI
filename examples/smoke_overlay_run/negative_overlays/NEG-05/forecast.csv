@@ -1,0 +1,2 @@
+forecast_id,run_id,sku_id,store_id,forecast_origin,target_date,horizon,predicted_units,model_version,status,split,feature_cutoff,feature_source,selection_status
+FC-STORE-000001-SKU-000002-2026-01,FC-RUN-NEGATIVE-OVERLAY,SKU-000002,STORE-000001,2026-01-20,2026-01-21,1,4.0,negative-overlay-v1,VALIDATED,test,2026-01-20,public_sales_history:2026-01-21,CANDIDATE

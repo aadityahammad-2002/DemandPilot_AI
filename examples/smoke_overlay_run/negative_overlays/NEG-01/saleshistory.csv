@@ -1,0 +1,2 @@
+sale_id,sku_id,store_id,sales_date,units_sold,selling_price,promotion_flag,promotion_multiplier,stockout_flag,observed_available_units
+SALE-STORE-000001-SKU-000002-2026-01-20,SKU-000002,STORE-000001,2026-01-20,0,180.06,False,1.0,False,0

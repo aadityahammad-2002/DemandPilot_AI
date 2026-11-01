@@ -1,0 +1,31 @@
+{
+  "config": {
+    "demand_volatility_floor": 0.25,
+    "lead_observation_window_days": 180,
+    "max_extension_days": 56,
+    "max_horizon_days": 90,
+    "max_pairs": 12,
+    "min_lead_observations": 2,
+    "stockout_uncertainty_uplift": 0.5
+  },
+  "database_mutations": false,
+  "external_open_orders_sha256": null,
+  "files": {
+    "decision_audit.jsonl": "126c5b8ddf52566c6a6da9fd373334c6b45a9ed60b7e9609ccd51d567bc66701",
+    "exceptions.csv": "8fd6512f3e9069cf2672fa03ca9f202cbd71075aba4dc6d26004bbe5e7f49887",
+    "purchase_recommendations.csv": "0d30b887a974927a17cb7104f50d105af3abc4503cd78abbb54227103ac5b231",
+    "recommendation_traces.jsonl": "3786c7995dd7c2993131351620e33bbd4226c6314f4e8dcac2c2925d75fe1b7a",
+    "summary.json": "a15e2ccea790a65e499b7f5753ef7f18320626861ed817fef20132a1a40a044c",
+    "technical_recommendation_lifecycle_events.jsonl": "b6f80ff9f3f507fa5a77c8f157568e7199bd0b8df2e6324cefc0b831f055ec16",
+    "unbound_exceptions.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "forecast_manifest_sha256": "6ee2e0b37b3824d1ffdc57576d5653b674da0db1ce52fe3295905033e25769e9",
+  "forecast_run_id": "FC-RUN-27B6D2A578D71BB689A8",
+  "full_scale_execution": "DEFERRED",
+  "input_digest": "854d92986c712f9466239766a13ff50210a55088e6b2c0afcd3b2111b28013d3",
+  "rows": 12,
+  "rule_version": "P4-REPLENISH-v3",
+  "run_id": "RP-RUN-854D92986C712F946623",
+  "schema_version": "P4-v1",
+  "source_manifest_sha256": "268addb396ed7c61d5523e096a24ed54fa043bd015cafdfcaa3be09806eb19c2"
+}

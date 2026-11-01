@@ -1,0 +1,70 @@
+{
+  "database_mutations": false,
+  "files": {
+    "evaluation.json": "daac926e47b3c22397158b96b6d03ab0c0fd9cc0a07e9eddbeaa82171f9cb6ee",
+    "evaluation_scoring.csv": "2232ccf6fded07ed8507e88036de72629c2364b0a2b0663185d9936a1c11544d",
+    "explainability.json": "896999cdd5e6023dd2b7753aaa1112943ed599ab8441978167f59ee7a6284275",
+    "forecast_model.joblib": "10d4ff331bc64b0bdb12cd063f05a81700a4e9a9e7d0fc6a742165f7c4249446",
+    "forecast_predictions.csv": "2b6e173a787385ebb4ae40316f09d8a1cd9686b4951b52ac7d18b98e4401ba5d",
+    "forecast_selected.csv": "0c8067df84d63eb73d091cc3231d8267111c253ff0932631c0acd7e4112c412e"
+  },
+  "forecast_config": {
+    "horizons": [
+      1,
+      7,
+      14,
+      28
+    ],
+    "max_origins_per_split": 12,
+    "max_pairs": 12,
+    "max_train_rows": 1000,
+    "min_history": 7,
+    "model_iterations": 30,
+    "origin_stride": 7,
+    "seed": 20261030
+  },
+  "full_coverage": false,
+  "full_scale_verification": "NOT_ASSESSED_BY_FORECAST_PIPELINE",
+  "generator_manifest_sha256": "268addb396ed7c61d5523e096a24ed54fa043bd015cafdfcaa3be09806eb19c2",
+  "input_signature": "27b6d2a578d71bb689a807a3530ea8744cc5214bed8d656ecb2faf6ff6fee60a",
+  "model_versions": {
+    "croston_sba": "phase3-croston_sba-v1",
+    "ml_hgb": "phase3-ml_hgb-v1",
+    "moving_average": "phase3-moving_average-v1",
+    "seasonal_naive": "phase3-seasonal_naive-v1"
+  },
+  "promotion_calendar_used": false,
+  "rows_exported": 184,
+  "run_id": "FC-RUN-27B6D2A578D71BB689A8",
+  "run_id_scope": "run-scoped output; database insert must allocate nonconflicting forecast IDs across runs",
+  "runtime_versions": {
+    "numpy": "2.3.5",
+    "scikit_learn": "1.8.0"
+  },
+  "scored_rows": 180,
+  "selected_model": "moving_average",
+  "selected_pairs": 12,
+  "train_validation_test": {
+    "test": {
+      "days": 7,
+      "end_exclusive": "2026-02-05",
+      "start": "2026-01-29"
+    },
+    "train": {
+      "days": 21,
+      "end_exclusive": "2026-01-22",
+      "start": "2026-01-01"
+    },
+    "validation": {
+      "days": 7,
+      "end_exclusive": "2026-01-29",
+      "start": "2026-01-22"
+    }
+  },
+  "training": {
+    "censored_targets_skipped": 5,
+    "rows_seen": 138,
+    "rows_used": 138
+  },
+  "version": "P3-v1"
+}

@@ -1,0 +1,39 @@
+# Credentials / personal configuration
+.env
+.env.*
+!.env.example
+!.env.phase5.example
+**/.env
+**/.env.*
+!**/.env.example
+!**/.env.phase5.example
+*.pem
+*.key
+*.p12
+*.dump
+*.sqlite
+*.db
+# Local environments, caches and generated binaries
+.venv/
+venv/
+node_modules/
+dist/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+playwright-report/
+test-results/
+*.tsbuildinfo
+.yottaflex_backups/
+*.bak
+*.backup
+*.log
+# Full-scale datasets must NOT be committed: huge, regenerable files
+P1-T02-FULL-*/
+full_run/
+full_scale_outputs/
+full_scale_evidence/
+*.parquet
+# Keep curated, safe summary evidence committed under evidence/

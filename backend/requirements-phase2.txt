@@ -1,0 +1,4 @@
+-r requirements.txt
+# For the full-scale 73M potential row profile; smoke profile can use CSV only.
+pyarrow>=17,<25
+duckdb>=1.1,<2

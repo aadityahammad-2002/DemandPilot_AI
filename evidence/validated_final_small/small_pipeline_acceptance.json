@@ -1,0 +1,35 @@
+{
+  "backtest_baseline": {
+    "fill_rate": 1.0,
+    "fulfilled_units": 66,
+    "holding_cost_estimate": 13.11,
+    "lost_units": 0,
+    "ordered_units": 66,
+    "requested_units": 66,
+    "service_target_met_pairs": 5,
+    "stockout_days": 0
+  },
+  "backtest_engine": {
+    "fill_rate": 1.0,
+    "fulfilled_units": 66,
+    "holding_cost_estimate": 14.33,
+    "lost_units": 0,
+    "ordered_units": 110,
+    "requested_units": 66,
+    "service_target_met_pairs": 5,
+    "stockout_days": 0
+  },
+  "backtest_pairs": 6,
+  "backtest_status": "PASS",
+  "database_mutations": false,
+  "forecast_rows": 184,
+  "forecast_run_id": "FC-RUN-27B6D2A578D71BB689A8",
+  "forecast_validation": "PASS",
+  "full_scale_accepted": false,
+  "generation_overlay_validation": "PASS",
+  "positive_recommendations": 8,
+  "replenishment_decisions": 12,
+  "replenishment_validation": "PASS",
+  "scope": "12 selected pairs of 12 SKU/3-store/35-day generated smoke overlay data, 5-day business holdout",
+  "selected_model": "moving_average"
+}

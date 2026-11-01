@@ -1,0 +1,23 @@
+{
+  "checksums": "SHA-256 logical per partition; physical output validated separately",
+  "config": {
+    "days": 90,
+    "format": "csv",
+    "movement_journal": true,
+    "seed": 20261030,
+    "sku_count": 100,
+    "start_date": "2026-01-01",
+    "store_batch": 2,
+    "store_count": 10,
+    "supplier_count": 80
+  },
+  "fact_partitions_compared": 65,
+  "files_compared": 72,
+  "issue_count": 0,
+  "issues": [],
+  "logical_rows_compared": 333745,
+  "method": "independent streaming regeneration",
+  "no_second_full_dataset_written": true,
+  "seed": 20261030,
+  "status": "PASS"
+}

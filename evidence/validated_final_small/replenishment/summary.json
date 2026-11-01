@@ -1,0 +1,23 @@
+{
+  "assumptions": [
+    "forecast horizon interpolation and explicit bounded flat extension",
+    "uncertainty uses past uncensored sales variability proxy, not calibrated forecast intervals",
+    "current-day store occupancy only; missing previously stocked SKU snapshots block orders"
+  ],
+  "blocked": 0,
+  "database_mutations": false,
+  "decisions": 12,
+  "external_open_orders_sha256": null,
+  "full_scale_generation": "DEFERRED_NOT_EXECUTED",
+  "generated": 12,
+  "pipeline_stock": "ZERO_NO_VERIFIED_SOURCE",
+  "positive": 8,
+  "reasons": {
+    "REORDER_POINT_NOT_REACHED": 4,
+    "REORDER_POINT_TRIGGERED": 8
+  },
+  "run_id": "RP-RUN-854D92986C712F946623",
+  "run_scoped_ids": "PO IDs require collision-safe allocator for multi-run PostgreSQL integration",
+  "source_pairs": 12,
+  "unbound_exceptions": 0
+}

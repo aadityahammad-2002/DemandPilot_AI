@@ -1,0 +1,1 @@
+recommendation_id,policy_id,sku_id,store_id,supplier_sku_id,decision_date,forecast_run_id,inventory_date,inventory_position,lead_time_demand,raw_quantity,recommended_quantity,status,reason_codes,rule_version,decision_trace

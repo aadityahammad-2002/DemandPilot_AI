@@ -1,0 +1,4 @@
+store_id,region,timezone,open_date,close_date,status,capacity_units
+STORE-000001,North,Asia/Kolkata,2024-01-02,,OPEN,50000
+STORE-000002,South,Asia/Kolkata,2024-01-02,,OPEN,50000
+STORE-000003,East,Asia/Kolkata,2024-01-02,,OPEN,50000

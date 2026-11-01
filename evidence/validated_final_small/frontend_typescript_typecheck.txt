@@ -1,0 +1,4 @@
+Host: Linux; node=v22.16.0
+TypeScript: Version 5.9.3
+Command: node node_modules/typescript/bin/tsc -b --pretty false
+EXIT_CODE=0

@@ -1,0 +1,11 @@
+{
+  "days": 35,
+  "format": "csv",
+  "movement_journal": true,
+  "seed": 20261030,
+  "sku_count": 12,
+  "start_date": "2026-01-01",
+  "store_batch": 1,
+  "store_count": 3,
+  "supplier_count": 80
+}

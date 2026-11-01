@@ -1,0 +1,87 @@
+﻿[
+    {
+        "Check":  "PostgreSQL preflight + integrity + 12-table fingerprint",
+        "Status":  "PASS",
+        "Details":  "isolated v7 database, migration 0005, reconciliations and historical eligibility"
+    },
+    {
+        "Check":  "Existing FastAPI worker health",
+        "Status":  "PASS",
+        "Details":  "127.0.0.1:8000/health returned 200; no new worker started"
+    },
+    {
+        "Check":  "Backend automated regression",
+        "Status":  "PASS",
+        "Details":  "pytest exit 0 (previous baseline 192 passed, 1 skipped)"
+    },
+    {
+        "Check":  "PostgreSQL schema verification scripts",
+        "Status":  "PASS",
+        "Details":  "both existing verification scripts returned exit 0"
+    },
+    {
+        "Check":  "Frontend Vitest 8 unit regressions",
+        "Status":  "PASS",
+        "Details":  "Vitest scoped to src (avoids known Playwright test discovery conflict)"
+    },
+    {
+        "Check":  "TypeScript + Vite production build",
+        "Status":  "PASS",
+        "Details":  "TypeScript and Vite built successfully"
+    },
+    {
+        "Check":  "Live API business counts, pagination, detail trace",
+        "Status":  "PASS",
+        "Details":  "138 forecasts, 36 recommendations, 73 stockouts, 8 jobs, 1+1 source runs; pagination and detail trace verified"
+    },
+    {
+        "Check":  "PERF-02 payload and latency (5 samples)",
+        "Status":  "PASS",
+        "Details":  "avg 15.62 ms, 18.63 KB, payload -81.6% vs historical"
+    },
+    {
+        "Check":  "Playwright full browser regression (7 tests)",
+        "Status":  "PASS",
+        "Details":  "Playwright exit 0, includes new persisted decision trace drawer test"
+    },
+    {
+        "Check":  "No business/ledger changes during one-shot run",
+        "Status":  "PASS",
+        "Details":  "all 12 smoke-data tables have unchanged counts + SHA-256 row-content fingerprints"
+    },
+    {
+        "Check":  "PERF-02 regression source coverage",
+        "Status":  "PASS",
+        "Details":  "list excludes trace; detail drawer and regression assertion retained"
+    },
+    {
+        "Check":  "TEST-CONFIG-01",
+        "Status":  "WARN",
+        "Details":  "Plain npx vitest run may collect Playwright e2e; this script runs vitest run src. Fix config exclude later."
+    },
+    {
+        "Check":  "PERF-03",
+        "Status":  "WARN",
+        "Details":  "Vite bundle-size warning (~693 KB minified) may remain; code splitting not performed."
+    },
+    {
+        "Check":  "Live concurrency/failure recovery",
+        "Status":  "WARN",
+        "Details":  "This read-only acceptance does not start concurrent jobs or kill workers; dedicated destructive/isolation-controlled validation remains."
+    },
+    {
+        "Check":  "Full-scale generation/load test",
+        "Status":  "WARN",
+        "Details":  "Intentionally DEFERRED: 2,000 SKU x 100 stores x 365 days, per user instruction."
+    },
+    {
+        "Check":  "Current historical SKU eligibility",
+        "Status":  "PASS",
+        "Details":  "Three current positive recommendations have decision date 2026-01-28 before discontinuation 2026-01-30 (validated in database audit)."
+    },
+    {
+        "Check":  "Historical Phase 4 artifact reconciliation",
+        "Status":  "WARN",
+        "Details":  "Historical Phase 4 blocked recommendation identities have not been independently matched to the current three positives."
+    }
+]

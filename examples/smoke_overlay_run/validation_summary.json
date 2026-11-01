@@ -1,0 +1,59 @@
+{
+  "entities": {
+    "forecast": 0,
+    "ground_truth_labels": 1164,
+    "inventory_snapshot": 1182,
+    "lead_time_observation": 24,
+    "purchase_recommendation": 0,
+    "reorder_policy": 36,
+    "sales_history": 1164,
+    "sku": 12,
+    "store": 3,
+    "supplier": 80,
+    "supplier_sku": 12
+  },
+  "error_count": 0,
+  "errors": [],
+  "file_count": 43,
+  "negative_overlay_validation": {
+    "classification": {
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "tn": 5,
+      "tp": 5
+    },
+    "errors": [],
+    "issue_types": [
+      "NEG-01",
+      "NEG-02",
+      "NEG-03",
+      "NEG-04",
+      "NEG-05"
+    ],
+    "overlay_rows": 5,
+    "status": "PASS"
+  },
+  "negative_scenarios": [
+    "NEG-01",
+    "NEG-02",
+    "NEG-03",
+    "NEG-04",
+    "NEG-05"
+  ],
+  "note": "validated independent full-stream scan, not PostgreSQL import or forecast/replenishment behavior",
+  "reconciled": {
+    "actual_zero_demand_days": 323,
+    "eligible_sku_store_days": 1164,
+    "latent_demand_units": 5353,
+    "lost_demand_units": 430,
+    "observed_sales_units": 4923,
+    "promotion_days": 86,
+    "received_units": 5429,
+    "retired_inventory_snapshot_days": 18,
+    "stockout_censored_days": 73
+  },
+  "status": "PASS"
+}

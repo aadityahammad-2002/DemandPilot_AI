@@ -1,0 +1,30 @@
+{
+  "config": {
+    "days": 90,
+    "format": "csv",
+    "movement_journal": true,
+    "seed": 20261030,
+    "sku_count": 100,
+    "start_date": "2026-01-01",
+    "store_batch": 2,
+    "store_count": 8,
+    "supplier_count": 80
+  },
+  "database_mutations": false,
+  "disk_bytes": 31926516,
+  "eligible_rows_per_generation_second": 8380.48,
+  "eligible_sales_rows": 69192,
+  "environment": {
+    "platform": "Linux",
+    "python": "3.13.5"
+  },
+  "full_scale_status": "NOT_RUN",
+  "generation_seconds": 8.256,
+  "generator_status": "PASS",
+  "negative_overlay_status": "PASS",
+  "peak_rss_kib_python_process": 102660,
+  "potential_rows": 72000,
+  "rows_per_second_projection_is_not_validated_full_scale": true,
+  "scope": "CSV pilot only, not full Parquet or 73M acceptance",
+  "validation_seconds": 4.492
+}

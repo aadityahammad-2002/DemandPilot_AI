@@ -1,0 +1,3 @@
+inventory_id,sku_id,store_id,snapshot_date,opening_stock,received_units,sold_units,adjustment_units,closing_stock,reserved_units
+INV-STORE-000003-SKU-000002-2026-01-30,SKU-000002,STORE-000003,2026-01-30,36,0,0,0,36,0
+INV-STORE-000003-SKU-000002-2026-01-31,SKU-000002,STORE-000003,2026-01-31,36,0,0,0,36,0

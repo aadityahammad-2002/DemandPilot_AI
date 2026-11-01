@@ -1,0 +1,109 @@
+{
+  "approach": "rolling-origin recursive multi-step, no future sales",
+  "excluded": "restricted_ground_truth, negative_fixtures, sku.base_demand_rate, future promotion_flag, future sales, final sku.status",
+  "explanations": "permutation importance on bounded TRAINING sample; no causal claims",
+  "feature_lineage": "public sales_history plus sku.category/launch_date and store.region",
+  "future_promotion_policy": "no public future plan supplied; future realized flags excluded",
+  "run_id": "FC-RUN-27B6D2A578D71BB689A8",
+  "stockout_policy": "impute censored history using prior uncensored days; exclude censored training labels and evaluation targets",
+  "train": {
+    "censored_targets_skipped": 5,
+    "feature_names": [
+      "lag1",
+      "lag7",
+      "mean7",
+      "mean28",
+      "std28",
+      "positive_rate28",
+      "true_zero_rate28",
+      "censored_rate28",
+      "promo_rate28",
+      "weekday_sin",
+      "weekday_cos",
+      "year_sin",
+      "year_cos",
+      "category_code",
+      "region_code",
+      "age_days",
+      "scheduled_promo_flag",
+      "scheduled_promo_multiplier"
+    ],
+    "importance_training_only": [
+      {
+        "feature": "mean7",
+        "importance": 1.625552
+      },
+      {
+        "feature": "mean28",
+        "importance": 1.267578
+      },
+      {
+        "feature": "std28",
+        "importance": 0.171772
+      },
+      {
+        "feature": "lag1",
+        "importance": 0.122819
+      },
+      {
+        "feature": "true_zero_rate28",
+        "importance": 0.098329
+      },
+      {
+        "feature": "year_sin",
+        "importance": 0.096884
+      },
+      {
+        "feature": "lag7",
+        "importance": 0.077987
+      },
+      {
+        "feature": "weekday_cos",
+        "importance": 0.06927
+      },
+      {
+        "feature": "age_days",
+        "importance": 0.039716
+      },
+      {
+        "feature": "positive_rate28",
+        "importance": 0.037198
+      },
+      {
+        "feature": "category_code",
+        "importance": 0.032128
+      },
+      {
+        "feature": "promo_rate28",
+        "importance": 0.02796
+      },
+      {
+        "feature": "weekday_sin",
+        "importance": 0.012545
+      },
+      {
+        "feature": "censored_rate28",
+        "importance": 0.009005
+      },
+      {
+        "feature": "year_cos",
+        "importance": 0.007345
+      },
+      {
+        "feature": "region_code",
+        "importance": 0.0
+      },
+      {
+        "feature": "scheduled_promo_flag",
+        "importance": 0.0
+      },
+      {
+        "feature": "scheduled_promo_multiplier",
+        "importance": 0.0
+      }
+    ],
+    "rows_seen": 138,
+    "rows_used": 138,
+    "seed": 20261030
+  }
+}
