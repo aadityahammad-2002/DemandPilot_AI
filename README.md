@@ -126,7 +126,7 @@ Set a private password for the role:
 Create the database:
 
 ```sql
-CREATE DATABASE yottaflex OWNER yottaflex;
+CREATE DATABASE yottaflex cleaR yottaflex;
 ```
 
 Exit `psql`:
