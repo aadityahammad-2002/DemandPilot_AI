@@ -9,18 +9,18 @@ The application supports synthetic retail data generation, demand forecasting, i
 
 Install the following software before setting up the project:
 
-| Software | Version |
-|---|---|
-| Python | 3.13 |
-| Node.js | 24.x or compatible |
-| npm | Installed with Node.js |
-| PostgreSQL | 18 or compatible |
-| Git | Latest stable |
-| VS Code | Recommended |
+| **Software** | **Version**            |
+| ------------ | ---------------------- |
+| Python       | 3.13                   |
+| Node.js      | 24.x or compatible     |
+| npm          | Installed with Node.js |
+| PostgreSQL   | 18 or compatible       |
+| Git          | Latest stable          |
+| VS Code      | Recommended            |
 
 Verify your installations in PowerShell:
 
-```powershell
+```
 python --version
 node --version
 npm --version
@@ -31,15 +31,15 @@ PostgreSQL must be installed and its Windows service must be running.
 
 ## 2. Clone the Repository
 
-```powershell
-git clone https://github.com/aadityahammad-2002/yottaflex-demand-forecasting.git
+```
+git clone https://github.com/aadityahammad-2002/DemandPolot_AI.git
 
-cd yottaflex-demand-forecasting
+cd DemandPolot_AI
 ```
 
 Open the project in VS Code:
 
-```powershell
+```
 code .
 ```
 
@@ -53,39 +53,39 @@ Open a new PowerShell terminal in VS Code.
 
 Navigate to the backend:
 
-```powershell
+```
 cd backend
 ```
 
 Create a Python virtual environment:
 
-```powershell
+```
 py -3.13 -m venv .venv
 ```
 
 Activate the environment:
 
-```powershell
+```
 .\.venv\Scripts\Activate.ps1
 ```
 
 If PowerShell blocks activation, run:
 
-```powershell
+```
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned
 .\.venv\Scripts\Activate.ps1
 ```
 
 Install backend dependencies:
 
-```powershell
+```
 python -m pip install --upgrade pip
 python -m pip install -r requirements-phase5.txt
 ```
 
 Verify dependency installation:
 
-```powershell
+```
 python -m pip check
 ```
 
@@ -101,37 +101,37 @@ If you already have an approved `yottaflex_dual_v7` database with migration revi
 
 For a fresh installation, open PostgreSQL's `psql` terminal as an administrator:
 
-```powershell
+```
 psql -U postgres -d postgres
 ```
 
 If `psql` is not on your PATH, use its full installation path, for example:
 
-```powershell
+```
 & "C:\Program Files\PostgreSQL\18\bin\psql.exe" -U postgres -d postgres
 ```
 
 Run the following commands inside `psql`:
 
-```sql
+```
 CREATE ROLE yottaflex LOGIN;
 ```
 
 Set a private password for the role:
 
-```text
+```
 \password yottaflex
 ```
 
 Create the database:
 
-```sql
+```
 CREATE DATABASE yottaflex cleaR yottaflex;
 ```
 
 Exit `psql`:
 
-```text
+```
 \q
 ```
 
@@ -141,13 +141,13 @@ Use a unique local database password. Never commit database credentials to GitHu
 
 From the `backend` directory:
 
-```powershell
+```
 Copy-Item .env.example .env
 ```
 
 Open `backend/.env` and configure:
 
-```dotenv
+```
 DATABASE_URL=postgresql+psycopg://yottaflex:YOUR_URL_ENCODED_PASSWORD@localhost:5432/yottaflex_dual_v7
 APP_ENV=development
 SQL_ECHO=false
@@ -161,19 +161,19 @@ The `.env` file is private and must not be uploaded to GitHub.
 
 If you created a brand-new empty database, run from `backend`:
 
-```powershell
+```
 python -m alembic upgrade head
 ```
 
 Verify the migration:
 
-```powershell
+```
 python -m alembic current
 ```
 
 Expected revision:
 
-```text
+```
 0005 (head)
 ```
 
@@ -183,13 +183,13 @@ Expected revision:
 
 From `backend`:
 
-```powershell
+```
 python verify_backend_schema_readonly.py
 ```
 
 Expected result includes:
 
-```text
+```
 READ-ONLY POSTGRESQL SCHEMA CHECK: PASS
 ```
 
@@ -201,25 +201,25 @@ Open a second PowerShell terminal in VS Code.
 
 From the project root, navigate to the frontend:
 
-```powershell
+```
 cd frontend
 ```
 
 Install frontend dependencies:
 
-```powershell
+```
 npm ci
 ```
 
 Optional frontend environment configuration:
 
-```powershell
+```
 Copy-Item .env.example .env.local
 ```
 
 The frontend API URL should be:
 
-```dotenv
+```
 VITE_API_BASE_URL=http://127.0.0.1:8000
 ```
 
@@ -235,55 +235,55 @@ The backend and frontend run as separate services.
 
 From the project root, run:
 
-```powershell
+```
 cd backend
 ```
 
 Start the backend:
 
-```powershell
+```
 .\.venv\Scripts\python.exe -m uvicorn app.integration.api:create_app --factory --host 127.0.0.1 --port 8000
 ```
 
 Expected terminal output:
 
-```text
+```
 Application startup complete.
 Uvicorn running on http://127.0.0.1:8000
 ```
 
 Backend endpoints:
 
-| Service | URL |
-|---|---|
-| API Base | http://127.0.0.1:8000 |
-| Health Check | http://127.0.0.1:8000/health |
-| Swagger API Docs | http://127.0.0.1:8000/docs |
-| Dataset Validation | http://127.0.0.1:8000/api/v1/dataset-validation |
+| **Service**        | **URL**                                                                                            |
+| ------------------ | -------------------------------------------------------------------------------------------------- |
+| API Base           | [http://127.0.0.1:8000](http://127.0.0.1:8000/)                                                    |
+| Health Check       | [http://127.0.0.1:8000/health](http://127.0.0.1:8000/health)                                       |
+| Swagger API Docs   | [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)                                           |
+| Dataset Validation | [http://127.0.0.1:8000/api/v1/dataset-validation](http://127.0.0.1:8000/api/v1/dataset-validation) |
 
 Verify the backend by opening:
 
-http://127.0.0.1:8000/health
+[http://127.0.0.1:8000/health](http://127.0.0.1:8000/health)
 
 ### 6.2 Start the React Frontend — Terminal 2
 
 From the project root, run:
 
-```powershell
+```
 cd frontend
 npm run dev
 ```
 
 Expected output:
 
-```text
+```
 VITE ready
 Local: http://127.0.0.1:5173/
 ```
 
 Open the application:
 
-**http://127.0.0.1:5173**
+[**http://127.0.0.1:5173**](http://127.0.0.1:5173/)
 
 The welcome page provides two dashboard perspectives:
 
@@ -300,13 +300,13 @@ Press `Ctrl+C` in each running terminal.
 
 The repository includes:
 
-```text
+```
 START_PHASE5_WINDOWS.ps1
 ```
 
 After installing backend/frontend dependencies and configuring the approved PostgreSQL database at migration `0005`, run from the project root:
 
-```powershell
+```
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\START_PHASE5_WINDOWS.ps1
 ```
 
@@ -322,31 +322,31 @@ If a server does not start correctly, inspect the generated logs or use the sepa
 
 The repository includes a synthetic demo dataset:
 
-```text
+```
 examples/smoke_run/
 ```
 
 It also includes a labelled negative-scenario sample:
 
-```text
+```
 examples/smoke_overlay_run/
 ```
 
 To generate a fresh small dataset without modifying PostgreSQL, open a PowerShell terminal in `backend`:
 
-```powershell
+```
 cd backend
 ```
 
 Run:
 
-```powershell
+```
 .\.venv\Scripts\python.exe -m app.generation.cli generate --profile smoke --out ..\new_smoke_output
 ```
 
 Validate the output:
 
-```powershell
+```
 .\.venv\Scripts\python.exe -m app.generation.cli validate --out ..\new_smoke_output
 ```
 
@@ -366,7 +366,7 @@ For database import and pipeline execution, review the dedicated runbook before 
 
 From the `backend` directory:
 
-```powershell
+```
 .\.venv\Scripts\python.exe -m pytest tests -q --tb=short
 ```
 
@@ -376,19 +376,19 @@ The repository also provides a Windows verifier that runs the backend suite in f
 
 From `frontend`:
 
-```powershell
+```
 npm run test
 ```
 
 ### 9.3 Production Build
 
-```powershell
+```
 npm run build
 ```
 
 Production build output is generated in:
 
-```text
+```
 frontend/dist/
 ```
 
@@ -396,13 +396,13 @@ frontend/dist/
 
 Install the Chromium browser dependency if necessary:
 
-```powershell
+```
 npx playwright install chromium
 ```
 
 With the approved populated test database and both local services running:
 
-```powershell
+```
 npx playwright test --project=chromium --reporter=list
 ```
 
@@ -412,13 +412,13 @@ Some browser tests interact with the local application. Use only an approved tes
 
 From the project root:
 
-```powershell
+```
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\VERIFY_FINAL_WINDOWS.ps1
 ```
 
 For an additional read-only PostgreSQL verification:
 
-```powershell
+```
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\VERIFY_FINAL_WINDOWS.ps1 -CheckPostgres
 ```
 
@@ -428,8 +428,8 @@ It does not run full-scale generation, database resets, migrations, or GitHub pu
 
 ## 10. Project Structure
 
-```text
-YottaFlex_AI_FINAL_Submission/
+```
+DemandPilot_AI/
 |
 |-- backend/
 |   |-- app/
@@ -486,17 +486,17 @@ YottaFlex_AI_FINAL_Submission/
 
 ## 12. Technology Stack
 
-| Layer | Technology |
-|---|---|
-| Frontend | React, TypeScript, Vite |
-| Backend | Python, FastAPI |
-| Database | PostgreSQL |
-| ORM | SQLAlchemy |
-| Migrations | Alembic |
-| Forecasting | Statistical and machine-learning models |
-| Testing | Pytest, Vitest, Playwright |
-| Data Processing | CSV, optional Parquet |
-| Version Control | Git and GitHub |
+| **Layer**       | **Technology**                          |
+| --------------- | --------------------------------------- |
+| Frontend        | React, TypeScript, Vite                 |
+| Backend         | Python, FastAPI                         |
+| Database        | PostgreSQL                              |
+| ORM             | SQLAlchemy                              |
+| Migrations      | Alembic                                 |
+| Forecasting     | Statistical and machine-learning models |
+| Testing         | Pytest, Vitest, Playwright              |
+| Data Processing | CSV, optional Parquet                   |
+| Version Control | Git and GitHub                          |
 
 ## 13. Verification Status and Limitations
 
@@ -521,9 +521,9 @@ This project is a local-first coding challenge implementation, not a publicly ha
 
 See:
 
-- [Final Acceptance Matrix](FINAL_ACCEPTANCE_MATRIX.md)
-- [Final Implementation Report](FINAL_IMPLEMENTATION_REPORT.md)
-- [Windows Runbook](FINAL_WINDOWS_RUNBOOK.md)
+- [Final Acceptance Matrix](https://github.com/aadityahammad-2002/DemandPilot_AI/blob/main/FINAL_ACCEPTANCE_MATRIX.md)
+- [Final Implementation Report](https://github.com/aadityahammad-2002/DemandPilot_AI/blob/main/FINAL_IMPLEMENTATION_REPORT.md)
+- [Windows Runbook](https://github.com/aadityahammad-2002/DemandPilot_AI/blob/main/FINAL_WINDOWS_RUNBOOK.md)
 
 ## 14. AI Assistance and Documentation
 
@@ -531,11 +531,11 @@ AI tools were used extensively during design, implementation, debugging, validat
 
 Relevant documentation:
 
-- [AI Prompt History](docs/AI_PROMPT_HISTORY.md)
-- [AI Assistance Disclosure](docs/AI_ASSISTANCE_DISCLOSURE.md)
-- [Requirements Matrix](docs/REQUIREMENTS_MATRIX.md)
-- [Architecture Decisions](docs/architecture_decisions.md)
-- [Data Dictionary](docs/data_dictionary.json)
+- [AI Prompt History](https://github.com/aadityahammad-2002/DemandPilot_AI/blob/main/docs/AI_PROMPT_HISTORY.md)
+- [AI Assistance Disclosure](https://github.com/aadityahammad-2002/DemandPilot_AI/blob/main/docs/AI_ASSISTANCE_DISCLOSURE.md)
+- [Requirements Matrix](https://github.com/aadityahammad-2002/DemandPilot_AI/blob/main/docs/REQUIREMENTS_MATRIX.md)
+- [Architecture Decisions](https://github.com/aadityahammad-2002/DemandPilot_AI/blob/main/docs/architecture_decisions.md)
+- [Data Dictionary](https://github.com/aadityahammad-2002/DemandPilot_AI/blob/main/docs/data_dictionary.json)
 
 The prompt-history file contains available/recovered prompts and does not claim to be a complete verbatim export of every AI interaction.
 
@@ -552,7 +552,7 @@ The prompt-history file contains available/recovered prompts and does not claim 
 
 **Aaditya Hammad**
 
-GitHub: https://github.com/aadityahammad-2002
+GitHub: [https://github.com/aadityahammad-2002](https://github.com/aadityahammad-2002)
 
 **Project:** YottaFlex AI — Demand Forecasting & Inventory Replenishment
 
