@@ -1,5 +1,5 @@
 
-# YottaFlex AI — Demand Forecasting & Inventory Replenishment
+# DemandPilot_AI — Demand Forecasting & Inventory Replenishment
 
 A full-stack retail inventory planning system built using **Python, FastAPI, PostgreSQL, React, TypeScript, and Vite**.
 
